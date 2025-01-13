@@ -5,10 +5,16 @@
   ],
   "references": [
     {
-      "path": "exercises/01.example/01.problem.hello"
+      "path": "exercises/01.sunsetting-jsdom/01.problem.write-a-test"
     },
     {
-      "path": "exercises/01.example/01.solution.goodbye"
+      "path": "exercises/01.sunsetting-jsdom/01.solution.write-a-test"
+    },
+    {
+      "path": "exercises/01.sunsetting-jsdom/02.problem.break-jsdom"
+    },
+    {
+      "path": "exercises/01.sunsetting-jsdom/02.solution.break-jsdom"
     }
   ]
 }
