@@ -1,0 +1,7 @@
+# Include assets
+
+Problem: the component we render kind of looks broken. It has no styles. It doesn't look like what we render in the app.
+
+1. Create a custom `vitest.browser.context.ts` file.
+1. Import the assets you want to be included with each test here. E.g. `import './src/index.css'`.
+1. Include `vitest.browser.context.ts` in `vite.config.ts` (`test.browser.instances[i].setupFiles`).

@@ -4,3 +4,4 @@
 1. Install `vitest-browser-react` to render React components in the browser.
 1. Use `render` from `vitest-browser-react` to render the component now.
 1. Use `page` from `@vitest/browser/context` to select elements on the page for interactions and assertions.
+1. Since `page.getBy*` now returns ` Locator` object, adjust `expect` to be `expect.element(locator)` and await its assertions as they are async now.
