@@ -7,7 +7,9 @@ export default [
 		rules: {
 			// we leave unused vars around for the exercises
 			'no-unused-vars': 'off',
+			'import/order': 'off',
 			'@typescript-eslint/no-unused-vars': 'off',
+			'@typescript-eslint/no-floating-promises': 'off',
 		},
 	},
 ]
