@@ -1,5 +1,5 @@
 {
-  "name": "exercises_02.vitest-browser-mode_01.solution.installation-and-setup",
+  "name": "exercises_02.vitest-browser-mode_02.solution.migrate-the-test",
   "scripts": {
     "dev": "vite",
     "test": "vitest"
@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.1.0",
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
@@ -18,7 +19,6 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.7",
-    "vitest": "^3.0.0-beta.4",
-    "vitest-browser-react": "^0.0.4"
+    "vitest": "^3.0.0-beta.4"
   }
 }

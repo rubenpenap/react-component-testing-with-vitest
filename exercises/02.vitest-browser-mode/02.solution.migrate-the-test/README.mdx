@@ -1,0 +1,6 @@
+# Migrate the test
+
+0. Remove `@testing-library/react`. It expects JSDOM, but we are in the browser. For easier rendering, Vitest has specific wrappers for frameworks, like React or Vute.
+1. Install `vitest-browser-react` to render React components in the browser.
+1. Use `render` from `vitest-browser-react` to render the component now.
+1. Use `page` from `@vitest/browser/context` to select elements on the page for interactions and assertions.
