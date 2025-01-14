@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "exercises_01.sunsetting-jsdom_01.solution.break-jsdom",
   "scripts": {
     "dev": "vite",
@@ -19,6 +20,6 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.7",
-    "vitest": "^2.1.8"
+    "vitest": "^3.0.0-beta.4"
   }
 }

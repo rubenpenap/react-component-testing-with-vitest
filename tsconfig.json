@@ -21,6 +21,9 @@
     },
     {
       "path": "exercises/02.vitest-browser-mode/02.solution.migrate-the-test"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/03.solution.use-playwright"
     }
   ]
 }
