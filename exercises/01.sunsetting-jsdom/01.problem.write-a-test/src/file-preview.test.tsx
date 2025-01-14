@@ -5,8 +5,9 @@ import { FilePreview } from './file-preview.tsx'
 
 userEvent.setup()
 
-it('renders a preview card for the given file', async () => {
+it('displays the preview card', async () => {
 	render(<FilePreview file={new File(['hello world'], 'message.txt')} />)
 
-	expect(screen.getByText('message.txt')).toBeTruthy() /** @todo */
+	expect(screen.getByText('message.txt')).toBeTruthy()
+	expect(screen.getByText('hello world')).toBeTruthy()
 })
