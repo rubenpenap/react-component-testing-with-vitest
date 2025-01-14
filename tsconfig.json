@@ -29,7 +29,7 @@
       "path": "exercises/02.vitest-browser-mode/04.solution.use-dom-assertions"
     },
     {
-      "path": "exercises/02.vitest-browser-mode/05.solution.include-assets"
+      "path": "exercises/02.vitest-browser-mode/05.solution.include-shared-assets"
     }
   ]
 }
