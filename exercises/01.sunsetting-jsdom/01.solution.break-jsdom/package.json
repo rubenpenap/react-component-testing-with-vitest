@@ -1,5 +1,5 @@
 {
-  "name": "exercises_01.sunsetting-jsdom_01.problem.write-a-test",
+  "name": "exercises_01.sunsetting-jsdom_01.solution.break-jsdom",
   "scripts": {
     "dev": "vite",
     "test": "vitest"
@@ -11,7 +11,6 @@
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.1.0",
-    "@testing-library/user-event": "^14.5.2",
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
