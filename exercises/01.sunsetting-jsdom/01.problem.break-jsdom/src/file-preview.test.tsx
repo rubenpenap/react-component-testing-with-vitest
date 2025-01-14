@@ -1,10 +1,16 @@
 import { it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { FilePreview } from './file-preview.tsx'
 
 it('displays the preview card', async () => {
-	render(<FilePreview file={new File(['hello world'], 'message.txt')} />)
-
-	expect(screen.getByText('message.txt')).toBeTruthy()
-	expect(screen.getByText('hello world')).toBeTruthy()
+	// 🐨 Render the `FilePreview` component.
+	// 💰 render(<MyComponent />)
+	// Provide a new `File` instance as the value of the `file` prop.
+	// 💰 new File(['hello world'], 'file.txt')
+	//
+	// 🐨 Write an assertion that expects the file name to be present
+	// in the DOM (you can use `.toBeTruthy()` for now).
+	// 💰 screen.getByText(expectedText)
+	//
+	// 🐨 Similarly, write another assertion that expects
+	// the file contents to be present in the DOM.
 })
