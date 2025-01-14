@@ -24,6 +24,9 @@
     },
     {
       "path": "exercises/02.vitest-browser-mode/03.solution.use-playwright"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/04.solution.use-dom-assertions"
     }
   ]
 }
