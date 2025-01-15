@@ -7,18 +7,17 @@ export default defineConfig({
 	test: {
 		workspace: [
 			{
-				extends: true,
 				test: {
 					name: 'unit',
-					include: ['**/*.test.tsx?'],
+					include: ['**/*.test.ts'],
+					exclude: ['**/*.browser.test.ts(x)?'],
 					environment: 'node',
 				},
 			},
 			{
-				extends: true,
 				test: {
 					name: 'browser',
-					include: ['**/*.browser.test.tsx?'],
+					include: ['**/*.browser.test.ts(x)?'],
 					browser: {
 						enabled: true,
 						provider: 'playwright',

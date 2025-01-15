@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
+import { readFile } from './utils/read-file.js'
 
 export function FilePreview({ file }: { file: File }) {
 	const [previewText, setPreviewText] = useState<string>()
 
 	useEffect(() => {
-		file.text().then(setPreviewText)
+		readFile(file).then(setPreviewText)
 	}, [file])
 
 	return (
