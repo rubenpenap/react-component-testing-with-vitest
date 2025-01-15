@@ -1,4 +1,6 @@
-# Use Playwright
+# Playwright
+
+Problem: Using the default `preview` provider in Vitest is great to try things out, but it relies on Chromium being installed in your system (and also isn't that powerful). To have a proper setup, and be able to run it in CI, we need to define an explicit provider. Let's use Playwright.
 
 0. Explain why we want `playwright` and not the default `preview` browser provider (works better for CI, more powerful since it taps into the Chrome DevTools Protocol).
 1. Install `playwright`.

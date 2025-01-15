@@ -1,0 +1,7 @@
+# Multiple workspaces
+
+Problem: you may have unit tests and browser (integration) tests in the same project using Vitest.
+
+1. Update `vite.config.ts` to include multiple [`workspaces`](https://main.vitest.dev/guide/workspace.html#configuration): one for unit tests, another for browser tests.
+1. Update `package.json` with `test:unit` and `test:integration` scripts. Show how to run different workspaces from the CLI.
+1. List different strategies for separating tests: base on filename, base on directory.

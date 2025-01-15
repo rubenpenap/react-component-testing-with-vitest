@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "exercises_02.vitest-browser-mode_04.solution.use-dom-assertions",
+  "name": "exercises_02.vitest-browser-mode_03.solution.playwright",
   "scripts": {
     "dev": "vite",
     "test": "vitest"
