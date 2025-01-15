@@ -10,13 +10,15 @@ export default defineConfig({
 				extends: true,
 				test: {
 					name: 'unit',
-					include: ['**/*.test.ts'],
+					include: ['**/*.test.tsx?'],
+					environment: 'node',
 				},
 			},
 			{
 				extends: true,
 				test: {
 					name: 'browser',
+					include: ['**/*.browser.test.tsx?'],
 					browser: {
 						enabled: true,
 						provider: 'playwright',
