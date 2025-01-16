@@ -33,6 +33,15 @@
     },
     {
       "path": "exercises/02.vitest-browser-mode/06.solution.multiple-workspaces"
+    },
+    {
+      "path": "exercises/04.debugging/01.solution.attach-a-debugger"
+    },
+    {
+      "path": "exercises/04.debugging/02.solution.breakpoints"
+    },
+    {
+      "path": "exercises/04.debugging/03.solution.debug-console"
     }
   ]
 }
