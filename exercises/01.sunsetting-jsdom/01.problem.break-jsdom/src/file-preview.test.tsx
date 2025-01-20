@@ -1,7 +1,7 @@
 import { it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
-it('displays the preview card', async () => {
+test('displays the preview card', async () => {
 	// 🐨 Render the `FilePreview` component.
 	// 💰 render(<MyComponent />)
 	// Provide a new `File` instance as the value of the `file` prop.

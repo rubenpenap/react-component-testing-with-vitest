@@ -5,6 +5,6 @@
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "preserve",
-		"types": ["node"]
+		"types": ["node", "vitest/globals"]
 	}
 }
