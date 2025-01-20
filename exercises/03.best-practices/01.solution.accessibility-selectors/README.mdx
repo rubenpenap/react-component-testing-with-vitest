@@ -1,3 +1,16 @@
 # Accessibility selectors
 
 Problem: don't riddle your code with implementation details like `data-testId`. Select elements on the page like the user would actually see them—using the ARIA roles.
+
+- We've already used `page.getByText('file.txt')` in our test, which is great! Let's explore more accessible selectors you can use when testing your React components.
+
+A **form** should work nicely:
+
+- `.getByRole('heading')` for the form section heading on the page.
+- `.getByLabelText()` for inputs.
+- `.getByRole('button')` (again) for the submit button, but this time the button's text is broken by a visual element (an icon).
+
+Best practices:
+
+- Avoid `.getByTestId()`
+- Prefer `.getByLabelText()` vs `.getByPlaceholder()`
