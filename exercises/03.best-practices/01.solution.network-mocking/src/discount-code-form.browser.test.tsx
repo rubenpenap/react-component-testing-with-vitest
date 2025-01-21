@@ -1,9 +1,8 @@
 import { page, userEvent } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { http, HttpResponse } from 'msw'
+import { test } from '../test-extend.js'
 import { DiscountCodeForm, type Discount } from './discount-code-form.js'
-
-import { test } from '../my-test.js'
 
 test('applies a discount code', async () => {
 	render(<DiscountCodeForm />)
@@ -21,7 +20,7 @@ test('applies a discount code', async () => {
 		.toBeVisible()
 })
 
-test('displays a warning on legacy discount codes', async ({ worker }) => {
+test('displays a warning for legacy discount codes', async ({ worker }) => {
 	worker.use(
 		http.post<never, string, Discount>(
 			'https://api.example.com/discount/code',
