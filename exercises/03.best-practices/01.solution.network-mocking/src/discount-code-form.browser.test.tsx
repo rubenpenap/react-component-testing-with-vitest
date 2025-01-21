@@ -3,33 +3,7 @@ import { render } from 'vitest-browser-react'
 import { http, HttpResponse } from 'msw'
 import { DiscountCodeForm, type Discount } from './discount-code-form.js'
 
-import { worker } from './mocks/browser.js'
-
-beforeAll(async () => {
-	await worker.start({
-		quiet: true,
-		/**
-		 * @fixme @todo Better Vitest integration.
-		 * This has to be defined once for all tests.
-		 * Global setup can use `provide` but runs in Node.js.
-		 * Scoped setup can NOT use `provide` but runs in the browser.
-		 */
-		onUnhandledRequest(request, print) {
-			if (/(\.woff2?)$/.test(request.url)) {
-				return
-			}
-			print.warning()
-		},
-	})
-})
-
-afterEach(() => {
-	worker.resetHandlers()
-})
-
-afterAll(async () => {
-	worker.stop()
-})
+import { test } from '../my-test.js'
 
 test('applies a discount code', async () => {
 	render(<DiscountCodeForm />)
@@ -47,11 +21,11 @@ test('applies a discount code', async () => {
 		.toBeVisible()
 })
 
-test('displays a warning on legacy discount codes', async () => {
+test('displays a warning on legacy discount codes', async ({ worker }) => {
 	worker.use(
 		http.post<never, string, Discount>(
 			'https://api.example.com/discount/code',
-			async ({ request }) => {
+			async function override({ request }) {
 				const code = await request.text()
 
 				return HttpResponse.json({
@@ -90,7 +64,9 @@ test('displays a warning on legacy discount codes', async () => {
 		.toBeVisible()
 })
 
-test('displays an error when fetching the discount code', async () => {
+test('displays an error when fetching the discount code', async ({
+	worker,
+}) => {
 	worker.use(
 		http.post('https://api.example.com/discount/code', () => {
 			return new HttpResponse(null, { status: 500 })
