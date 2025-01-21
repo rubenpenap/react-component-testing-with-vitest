@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.base.json",
+	"include": ["**/*.test.ts*"],
+	"exclude": ["**/*.browser.test.ts*"],
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "preserve",
+		"types": ["node", "vitest/globals"]
+	}
+}
