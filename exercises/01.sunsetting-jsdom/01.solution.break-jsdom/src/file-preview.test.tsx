@@ -1,4 +1,4 @@
-import { it, expect } from 'vitest'
+import { test, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { FilePreview } from './file-preview.tsx'
 

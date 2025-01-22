@@ -1,5 +1,5 @@
-import { NewsletterForm } from './newsletter-form.js'
+import { DiscountCodeForm } from './discount-code-form.js'
 
 export function App() {
-	return <NewsletterForm />
+	return <DiscountCodeForm />
 }

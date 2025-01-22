@@ -1,4 +1,4 @@
-import { it, expect } from 'vitest'
+import { test, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
 test('displays the preview card', async () => {

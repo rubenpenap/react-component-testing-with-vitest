@@ -1,21 +1,3 @@
 # Accessibility selectors
 
-Problem: don't riddle your code with implementation details like `data-testId`. Select elements on the page like the user would actually see them—using the ARIA roles.
-
-- We've already used `page.getByText('file.txt')` in our test, which is great! Let's explore more accessible selectors you can use when testing your React components.
-
-A **form** should work nicely:
-
-- `.getByRole('heading')` for the form section heading on the page.
-- `.getByLabelText()` for inputs.
-- `.getByRole('button')` (again) for the submit button, but this time the button's text is broken by a visual element (an icon).
-- `.getByText()` for the submit success message to showcase selecting generic text on the page.
-
-Best practices:
-
-- Avoid `.getByTestId()`
-- Prefer `.getByLabelText()` vs `.getByPlaceholder()`
-
-Resources:
-
-- https://github.com/AriPerkkio/extend-to-be-announced for asserting `alert` and other live elements that get announced.
+Now that we have MSW set up, let's write some tests for the Discount code form! For that, we will need to select elements and interact with them just like our users would.

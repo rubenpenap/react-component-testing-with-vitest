@@ -5,11 +5,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
 	plugins: [react()],
 	test: {
-		globals: true,
 		workspace: [
 			{
 				test: {
 					name: 'unit',
+					globals: true,
 					include: ['**/*.test.ts'],
 					exclude: ['**/*.browser.test.ts(x)?'],
 					environment: 'node',
@@ -18,6 +18,7 @@ export default defineConfig({
 			{
 				test: {
 					name: 'browser',
+					globals: true,
 					include: ['**/*.browser.test.ts(x)?'],
 					browser: {
 						enabled: true,

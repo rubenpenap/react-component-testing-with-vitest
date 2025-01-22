@@ -4,10 +4,11 @@ Problem: performing requests to an actual server makes your test dependent on th
 
 Mocking APIs is a part of the _setup_ so it makes sense we start from it. It unblocks proper testing in the future exercises.
 
+**Focus on MSW integration only. We are writing tests in the next exercise.**
+
 ## Steps
 
 1. Install `msw`.
 1. Init the worker script.
 1. Create `/mocks/handlers.ts` with happy-path handlers, and `/mocks/browser.ts` with the worker.
 1. Create a custom _test context_ in the `test-extend.ts` file. Don't forget about `auto` to enable MSW even when it's not referenced in the test! (to rely on happy path handlers)
-1. Write the test cases for the discount form component.
