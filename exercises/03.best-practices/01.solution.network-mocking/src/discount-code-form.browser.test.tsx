@@ -50,17 +50,8 @@ test('displays a warning for legacy discount codes', async ({ worker }) => {
 		.element(page.getByText('Discount: LEGA2000 (-10%)'))
 		.toBeVisible()
 	await expect
-		.element(
-			page.getByText('"LEGA2000" is a legacy code. Discount amount halfed.'),
-			/**
-			 * @todo @fixme Use the role-based selector when the Vitest bug is fixed.
-			 * @see https://github.com/vitest-dev/vitest/issues/7327
-			 */
-			// page.getByRole('alert', {
-			// 	name: '"LEGA2000" is a legacy code. Discount amount halfed.',
-			// }),
-		)
-		.toBeVisible()
+		.element(page.getByRole('alert'))
+		.toHaveTextContent('"LEGA2000" is a legacy code. Discount amount halfed.')
 })
 
 test('displays an error when fetching the discount code', async ({
@@ -83,9 +74,6 @@ test('displays an error when fetching the discount code', async ({
 	await userEvent.click(submitButton)
 
 	await expect
-		.element(
-			page.getByText('Failed to apply the discount code'),
-			// page.getByRole('alert', { name: 'Failed to apply the discount code' }),
-		)
-		.toBeVisible()
+		.element(page.getByRole('alert'))
+		.toHaveTextContent('Failed to apply the discount code')
 })

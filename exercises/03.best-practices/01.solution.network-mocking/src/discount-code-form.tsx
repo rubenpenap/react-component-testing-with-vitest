@@ -104,7 +104,7 @@ export function DiscountCodeForm() {
 	return (
 		<section className="w-96 rounded-lg border bg-white p-10">
 			{state.submitting ? (
-				<p>
+				<p aria-hidden>
 					<span className="inline-block animate-spin font-bold">{'◡'}</span>
 				</p>
 			) : state.discount ? (
