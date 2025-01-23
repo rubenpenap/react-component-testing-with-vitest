@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "exercises_03.best-practices_04.solution.inverse-assertions",
+  "name": "exercises_03.best-practices_03.solution.network-mocking",
   "scripts": {
     "dev": "vite",
     "test": "vitest"

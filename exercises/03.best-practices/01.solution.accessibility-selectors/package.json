@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "exercises_03.best-practices_04.solution.inverse-assertions",
+  "name": "exercises_03.best-practices_01.solution.accessibility-selectors",
   "scripts": {
     "dev": "vite",
     "test": "vitest"
@@ -16,18 +16,12 @@
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/browser": "^3.0.2",
+    "@vitest/browser": "^3.0.3",
     "autoprefixer": "^10.4.20",
-    "msw": "^2.7.0",
     "playwright": "^1.49.1",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.7",
-    "vitest": "^3.0.2"
-  },
-  "msw": {
-    "workerDirectory": [
-      "public"
-    ]
+    "vitest": "^3.0.3"
   }
 }

@@ -35,13 +35,13 @@
       "path": "exercises/02.vitest-browser-mode/06.solution.multiple-workspaces"
     },
     {
-      "path": "exercises/03.best-practices/01.solution.network-mocking"
+      "path": "exercises/03.best-practices/01.solution.accessibility-selectors"
     },
     {
-      "path": "exercises/03.best-practices/02.solution.accessibility-selectors"
+      "path": "exercises/03.best-practices/02.solution.user-events"
     },
     {
-      "path": "exercises/03.best-practices/03.solution.user-events"
+      "path": "exercises/03.best-practices/03.solution.network-mocking"
     },
     {
       "path": "exercises/03.best-practices/04.solution.inverse-assertions"
