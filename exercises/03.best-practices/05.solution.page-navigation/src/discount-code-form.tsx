@@ -54,6 +54,17 @@ async function fetchDiscount(code: string): Promise<Discount> {
 	return data
 }
 
+async function removeDiscount(code: string): Promise<void> {
+	const response = await fetch('https://api.example.com/discount/code', {
+		method: 'DELETE',
+		body: code,
+	})
+
+	if (!response.ok) {
+		throw new Error(`Failed to remove the discount code (${response.status})`)
+	}
+}
+
 export function DiscountCodeForm() {
 	const [state, dispatch] = useReducer(discountFormReducer, {
 		submitting: false,
@@ -88,7 +99,7 @@ export function DiscountCodeForm() {
 			return
 		}
 
-		fetchDiscount(code)
+		await fetchDiscount(code)
 			.then((discount) => {
 				dispatch({ type: 'success', discount })
 
@@ -96,10 +107,26 @@ export function DiscountCodeForm() {
 					notify(`"${code}" is a legacy code. Discount amount halfed.`)
 				}
 			})
+			.catch(() => {
+				notify('Failed to apply the discount code', 'error')
+			})
+	}
+
+	const handleRemoveDiscount: FormEventHandler<HTMLFormElement> = async (
+		event,
+	) => {
+		event.preventDefault()
+
+		const data = new FormData(event.currentTarget)
+		const code = data.get('discountCode') as string
+
+		await removeDiscount(code)
+			.then(() => {
+				dispatch({ type: 'idle' })
+			})
 			.catch((error) => {
 				console.error(error)
-				notify('Failed to apply the discount code', 'error')
-				dispatch({ type: 'idle' })
+				notify('Failed to remove the discount code', 'error')
 			})
 	}
 
@@ -110,10 +137,28 @@ export function DiscountCodeForm() {
 					<span className="inline-block animate-spin font-bold">{'◡'}</span>
 				</p>
 			) : state.discount ? (
-				<p>
-					Discount: <strong>{state.discount.code}</strong> (-
-					{state.discount.amount}%)
-				</p>
+				<form
+					onSubmit={handleRemoveDiscount}
+					className="flex items-center justify-between gap-5"
+				>
+					<p>
+						Discount: <strong>{state.discount.code}</strong> (-
+						{state.discount.amount}%)
+					</p>
+
+					<input
+						name="discountCode"
+						value={state.discount.code}
+						readOnly
+						hidden
+					/>
+					<button
+						aria-label="Remove discount"
+						className="size-8 rounded-md border text-slate-500 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-700 focus:ring-4"
+					>
+						✗
+					</button>
+				</form>
 			) : (
 				<form onSubmit={handleApplyDiscount} className="flex flex-col gap-5">
 					<div>
@@ -137,6 +182,15 @@ export function DiscountCodeForm() {
 					>
 						Apply discount
 					</button>
+
+					<p className="text-center">
+						<a
+							href="/cart"
+							className="text-sm font-medium text-slate-500 hover:underline"
+						>
+							Back to cart
+						</a>
+					</p>
 				</form>
 			)}
 
