@@ -97,7 +97,5 @@ test('removes the applied discount code', async () => {
 	})
 	await removeDiscountButton.click()
 
-	await vi.waitFor(async () => {
-		await expect.element(discountText).not.toBeInTheDocument()
-	})
+	await expect.element(discountText).not.toBeInTheDocument()
 })

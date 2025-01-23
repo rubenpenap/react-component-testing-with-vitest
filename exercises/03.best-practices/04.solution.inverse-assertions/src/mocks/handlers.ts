@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw'
+import { delay, http, HttpResponse } from 'msw'
 import type { Discount } from '../discount-code-form.js'
 
 export const handlers = [
@@ -14,6 +14,7 @@ export const handlers = [
 		},
 	),
 	http.delete('https://api.example.com/discount/code', async () => {
+		await delay(500)
 		return new HttpResponse()
 	}),
 ]
