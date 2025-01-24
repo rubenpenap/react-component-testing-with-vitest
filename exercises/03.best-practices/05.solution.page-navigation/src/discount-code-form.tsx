@@ -1,4 +1,5 @@
 import { useReducer, useState, type FormEventHandler } from 'react'
+import { Link } from 'react-router'
 
 interface Notification {
 	type: 'error' | 'warning'
@@ -184,12 +185,12 @@ export function DiscountCodeForm() {
 					</button>
 
 					<p className="text-center">
-						<a
-							href="/cart"
+						<Link
+							to="/cart"
 							className="text-sm font-medium text-slate-500 hover:underline"
 						>
 							Back to cart
-						</a>
+						</Link>
 					</p>
 				</form>
 			)}

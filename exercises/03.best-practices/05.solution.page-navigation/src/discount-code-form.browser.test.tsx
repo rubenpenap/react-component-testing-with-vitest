@@ -1,11 +1,18 @@
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { http, HttpResponse } from 'msw'
+import { MemoryRouter, useLocation } from 'react-router'
 import { test } from '../test-extend.js'
 import { DiscountCodeForm, type Discount } from './discount-code-form.js'
 
+const wrapper: React.JSXElementConstructor<{
+	children: React.ReactNode
+}> = ({ children }) => {
+	return <MemoryRouter>{children}</MemoryRouter>
+}
+
 test('applies a discount code', async () => {
-	render(<DiscountCodeForm />)
+	render(<DiscountCodeForm />, { wrapper })
 
 	const discountInput = page.getByLabelText('Discount code')
 	await discountInput.fill('EPIC2025')
@@ -36,7 +43,7 @@ test('displays a warning for legacy discount codes', async ({ worker }) => {
 		),
 	)
 
-	render(<DiscountCodeForm />)
+	render(<DiscountCodeForm />, { wrapper })
 
 	const discountInput = page.getByLabelText('Discount code')
 	await discountInput.fill('LEGA2000')
@@ -63,7 +70,7 @@ test('displays an error when fetching the discount fails', async ({
 		}),
 	)
 
-	render(<DiscountCodeForm />)
+	render(<DiscountCodeForm />, { wrapper })
 
 	const discountInput = page.getByLabelText('Discount code')
 	await discountInput.fill('CODE1234')
@@ -79,7 +86,7 @@ test('displays an error when fetching the discount fails', async ({
 })
 
 test('removes the applied discount code', async () => {
-	render(<DiscountCodeForm />)
+	render(<DiscountCodeForm />, { wrapper })
 
 	const discountInput = page.getByLabelText('Discount code')
 	await discountInput.fill('EPIC2025')
@@ -98,4 +105,12 @@ test('removes the applied discount code', async () => {
 	await removeDiscountButton.click()
 
 	await expect.element(discountText).not.toBeInTheDocument()
+})
+
+test('redirects to the cart page ...', async () => {
+	render(<DiscountCodeForm />, { wrapper })
+
+	const backToCartLink = page.getByRole('link', { name: 'Back to cart' })
+	await expect.element(backToCartLink).toHaveAttribute('href', '/cart')
+	await expect.element(backToCartLink).toBeEnabled()
 })
