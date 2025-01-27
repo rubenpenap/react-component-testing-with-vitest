@@ -53,6 +53,9 @@
       "path": "exercises/04.debugging/01.problem.dom-snapshots"
     },
     {
+      "path": "exercises/04.debugging/01.solution.dom-snapshots"
+    },
+    {
       "path": "exercises/04.debugging/02.solution.debugger"
     },
     {

@@ -1,0 +1,139 @@
+# DOM snapshots
+
+I've got two failing tests on my hands, and a good place to start is to isolate the one I'm going to address first:
+
+```tsx filename=debug.browser.test.tsx
+test.only('places cross marks in a horizontal line', async () => {
+```
+
+Now that the test results represent only this failing test, I can move on with taking a look at what's going on here.
+
+The goal of this test is to validate one of the scenarios of interacting with the `<TicTacToe />` component. If I place three marks in a horizontal line, they should form a winning line. This is precisely what the test actions do:
+
+```tsx filename=debug.browser.test.tsx
+await page.getByRole('button', { name: 'left middle' }).click()
+await page.getByRole('button', { name: 'middle', exact: true }).click()
+await page.getByRole('button', { name: 'right middle' }).click()
+```
+
+> 🦉 Notice the usage of `exact: true` in the second action. It is there so that `name: 'middle'` matches the element with the accessible name `'middle'` exactly, ignoring the `'left middle'` and `'right middle'` elements that would otherwise match, too.
+
+The usage seems to be in order, but the test still fails:
+
+```
+AssertionError: expected [ '✗', '✗', '' ] to deeply equal [ '✗', '✗', '✗' ]
+```
+
+The rightmost mark is missing! But how? The test is clearly marking the left middle, middle, and the right middle squares of the game. Something is certainly off here...
+
+## Printing the entire DOM
+
+Luckily, I can observe the full state of the rendered DOM at any point in time using the `debug()` utility returned from `render()`:
+
+```tsx filename=debug.browser.test.tsx add=1,7
+const { debug } = render(<TicTacToe />)
+
+await page.getByRole('button', { name: 'left middle' }).click()
+await page.getByRole('button', { name: 'middle', exact: true }).click()
+await page.getByRole('button', { name: 'right middle' }).click()
+
+debug()
+```
+
+Calling the `debug()` function here will print out the entire DOM tree into the console after the test is done interacting with the `<TicTacToe />` component. This should, hopefully, give me some clue as to why that last check mark is missing.
+
+```html highlight=18-29,34-39
+<body>
+  <div>
+    <div
+      class="grid grid-cols-3 grid-rows-3"
+    >
+      <button
+        aria-label="top left"
+        class="size-16 border border-slate-400 text-4xl text-blue-500 hover:bg-slate-200 border-l-0 border-t-0"
+      />
+      <button
+        aria-label="top middle"
+        class="size-16 border border-slate-400 text-4xl text-blue-500 hover:bg-slate-200 border-t-0"
+      />
+      <button
+        aria-label="top right"
+        class="size-16 border border-slate-400 text-4xl text-blue-500 hover:bg-slate-200 border-r-0 border-t-0"
+      />
+      <button
+        aria-label="left middle"
+        class="size-16 border border-slate-400 text-4xl text-blue-500 hover:bg-slate-200 border-l-0"
+      >
+        ✗
+      </button>
+      <button
+        aria-label="middle"
+        class="size-16 border border-slate-400 text-4xl text-blue-500 hover:bg-slate-200 "
+      >
+        ✗
+      </button>
+      <button
+        aria-label="bottom left"
+        class="size-16 border border-slate-400 text-4xl text-blue-500 hover:bg-slate-200 border-r-0"
+      />
+      <button
+        aria-label="right middle"
+        class="size-16 border border-slate-400 text-4xl text-blue-500 hover:bg-slate-200 border-b-0 border-l-0"
+      >
+        ✗
+      </button>
+      <button
+        aria-label="bottom middle"
+        class="size-16 border border-slate-400 text-4xl text-blue-500 hover:bg-slate-200 border-b-0"
+      />
+      <button
+        aria-label="bottom right"
+        class="size-16 border border-slate-400 text-4xl text-blue-500 hover:bg-slate-200 border-b-0 border-r-0"
+      />
+    </div>
+  </div>
+</body
+```
+
+Having a bird's eye view on the DOM lets me see whether everything is rendered correctly and . . . What do you know! The last check mark indeed gets placed, and even in the correct square, but the square itself is at the wrong place! Looks like the `'bottom left'` and `'right middle'` sections of the game got swapped by accident the other day 😅.
+
+Hopefully, it's much easier to fix the bug than it was to find it:
+
+```tsx filename=tic-tac-toe.tsx remove=3 add=5
+	<Button aria-label="left middle" className="border-l-0" />
+	<Button aria-label="middle" />
+	<Button aria-label="bottom left" className="border-r-0" />
+	<Button aria-label="right middle" className="border-b-0 border-l-0" />
+	<Button aria-label="bottom left" className="border-r-0" />
+```
+
+Alright! The first test is back to green. But what about the second one?
+
+## Printing selected elements
+
+Sometimes the rendered element tree is too large to digest all at once. This is where isolating it to a particular element or a set of elements is a huge time-saver to get to the bottom of the issue.
+
+As it turns out, this is exactly the case for the second failing test.
+
+> TODO: Complete the solution once the second failing test is there.
+
+---
+
+This is where taking _spapshots_ comes in handy. At any point of your test, you can take a look at the current state of the DOM to see if it's what you expect it to be. You can do that by calling the `debug()` utility function returned from `render()`:
+
+```tsx
+const { debug } = render(<p>Hello world</p>)
+debug()
+```
+
+```html
+<body>
+	<p>Hello world</p>
+</body>
+```
+
+---
+
+- How to use `debug()` from `render()`.
+- You can debug the entire rendered tree by calling `debug()`.
+- You can debug a subportion of the tree but calling `debug(locator)` or even an array of locators.
