@@ -1,7 +1,7 @@
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { http, HttpResponse } from 'msw'
-import { MemoryRouter, useLocation } from 'react-router'
+import { MemoryRouter } from 'react-router'
 import { test } from '../test-extend.js'
 import { DiscountCodeForm, type Discount } from './discount-code-form.js'
 

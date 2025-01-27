@@ -44,22 +44,22 @@
       "path": "exercises/03.best-practices/03.solution.network-mocking"
     },
     {
-      "path": "exercises/03.best-practices/04.solution.inverse-assertions"
+      "path": "exercises/03.best-practices/04.solution.element-presence"
     },
     {
       "path": "exercises/03.best-practices/05.solution.page-navigation"
     },
     {
-      "path": "exercises/03.best-practices/06.solution.component-wrappers"
+      "path": "exercises/04.debugging/01.problem.dom-snapshots"
     },
     {
-      "path": "exercises/04.debugging/01.solution.attach-a-debugger"
+      "path": "exercises/04.debugging/02.solution.debugger"
     },
     {
-      "path": "exercises/04.debugging/02.solution.breakpoints"
+      "path": "exercises/04.debugging/03.solution.breakpoints"
     },
     {
-      "path": "exercises/04.debugging/03.solution.debug-console"
+      "path": "exercises/04.debugging/04.solution.debug-console"
     }
   ]
 }
