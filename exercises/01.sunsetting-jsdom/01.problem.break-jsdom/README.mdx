@@ -1,5 +1,15 @@
 # Break JSDOM
 
-0. You have a tiny React app with Vite.
-1. Install Vitest and JSDOM, and write a basic integration test for your React component.
-1. Run it to see it _failing_ even on this simple test.
+Before we talk about in-browser component testing, let's start with something familiar.
+
+In this exercise, you have a simple React application that previews the files you upload from your computer. To do that, it has a `type="file"` input and reads the content of the chosen file to display it for the user.
+
+You can run and play around with the application using this command:
+
+```sh
+npm run dev
+```
+
+Of course, like any quality software, this file preview app could use some automated tests. A great way to approach this is by introducing a test for the `<FilePreview />` component.
+
+👨‍💼 This is where you come in. Follow the instructions in `file-preview.test.tsx` and complete the first automated test for this component. Try running it via `npm test` but don't be discouraged if it suddenly _fails_.
