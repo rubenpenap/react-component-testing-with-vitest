@@ -1,5 +1,59 @@
 # Break JSDOM
 
-0. You have a tiny React app with Vite.
-1. Install Vitest and JSDOM, and write a basic integration test for your React component.
-1. Run it to see it _failing_ even on this simple test.
+I start with rendering the `<FilePreview />` component in my test:
+
+```tsx add=1,4
+import { test, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { FilePreview } from './file-review.js'
+
+test('displays the preview card', () => {
+	render(<FilePreview file={new File(['hello world'], 'file.txt')} />)
+})
+```
+
+I am using the `render()` function from React Testing Library as usual. Since my component requires the `file` prop, I am creating a dummy file instance using the [`File` API](https://developer.mozilla.org/en-US/docs/Web/API/File/File) and providing it as the input to my component.
+
+This test case doesn't involve any interaction with the component so I jump straight to the assertion step.
+
+Here, two things have my interest:
+
+1. The component must render the name of the previewed file (i.e. `file.txt`);
+1. The component must render the content of the previewed file.
+
+I reflect those two expectations like so:
+
+```tsx
+expect(screen.getByText('file.txt')).toBeTruthy()
+expect(screen.getByText('hello world')).toBeTruthy()
+```
+
+Looks like the first test is done. All that's left is to run via `npm test` and... Oh, no.
+
+```sh
+ FAIL  src/file-preview.test.tsx > displays the preview card
+TypeError: file.text is not a function
+ ❯ src/file-preview.tsx:7:8
+      5|
+      6|  useEffect(() => {
+      7|   file.text().then(setPreviewText)
+       |        ^
+      8|  }, [file])
+```
+
+😱 Something must be terribly wrong here...
+
+Except it's not. The `<FilePreview />` component calls the [`Blob.prototype.text`](https://developer.mozilla.org/en-US/docs/Web/API/Blob/text) (`File` inherits from `Blob`) method to retrieve the file's content correctly. The test is also exceptionally short to have any hidden pitfalls. **All except for one**.
+
+Turns out, the `Blob.prototype.text` method isn't implemented in JSDOM. You can reproduce this in isolation as well by running this code:
+
+```ts
+import { JSDOM } from 'jsdom'
+
+const dom = new JSDOM()
+const blob = new dom.window.Blob(['hello world'])
+await blob.text()
+// TypeError: (intermediate value).text is not a function
+```
+
+This is just one of the examples how introducing a custom, browser-like environment hurts your trust to your automated tests and the value you get from them. I really cannot stress this enough: _a valid test for a valid JavaScript code results in an error_. This test will run in Node.js as it will run in the browser, but not in JSDOM.
