@@ -1,4 +1,3 @@
-import { it, expect } from 'vitest'
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { FilePreview } from './file-preview.tsx'
