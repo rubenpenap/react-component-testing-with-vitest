@@ -1,7 +1,94 @@
 # Migrate the test
 
-0. Remove `@testing-library/react`. It expects JSDOM, but we are in the browser. For easier rendering, Vitest has specific wrappers for frameworks, like React or Vute.
-1. Install `vitest-browser-react` to render React components in the browser.
 1. Use `render` from `vitest-browser-react` to render the component now.
 1. Use `page` from `@vitest/browser/context` to select elements on the page for interactions and assertions.
 1. Since `page.getBy*` now returns ` Locator` object, adjust `expect` to be `expect.element(locator)` and await its assertions as they are async now.
+
+---
+
+While component tests in Vitest Browser Mode are extremely similar to those you used to write in JSDOM, there are a couple of key differences around component rendering, selecting elements on the page, and writing assertions.
+
+## Rendering
+
+First, I will adjust the rendering part. Before, I was using the `render()` function from `@testing-library/react`, which now gets replaced with the same function from the `vitest-browser-react` package:
+
+```tsx filename=file-preview.test.tsx remove=1 add=2
+import { render } from '@testing-library/react'
+import { render } from 'vitest-browser-react'
+```
+
+Much like React Testing Library, Vitest provides different bindings for rendering components from different frameworks, like `vitest-browser-react`, `vitest-browser-vue`, or `vitest-browser-svelte`.
+
+Usage-wise, both `render()` functions are identical, where Vitest's version supports a subset of the render `options` compared to RTL. This means that the render call itself stays the same:
+
+```tsx filename=file-preview.test.tsx highlight=5
+import { render } from 'vitest-browser-react'
+import { FilePreview } from './file-preview.tsx'
+
+test('displays the preview card', () => {
+  render(<FilePreview file={...} />)
+})
+```
+
+> 🦉 Unlike React Testing Library, `vitest-browser-react` performs the render cleanup **before** rendering the component. This allows you to observe its state on the page in case the test fails.
+
+## Element locators
+
+Previously, I used the `screen` object from RTL to find elements in the virtual DOM. When using Vitest Browser Mode, I can now locate elements (and interact with them) using the `page` object from `@vitest/browser/context` instead:
+
+```tsx filename=file-preview.test.tsx add=1 highlight=8-9
+import { page } from '@vitest/browser/context'
+import { render } from 'vitest-browser-react'
+import { FilePreview } from './file-preview.tsx'
+
+test('displays the preview card', () => {
+  render(<FilePreview file={...} />)
+
+  // Find an element with the text content of "file.txt".
+  page.getByText('file.txt')
+})
+```
+
+If you find this similar to Playwright, well, it's because the `page` API in Vitest is directly inspired by Playwright's `page`! It doesn't provide you with all the page's properties and methods because you aren't in a full end-to-end context to take advantage of them anyway.
+
+With the adoption of the `page` API, Vitest introduces the concept of [_locators_](https://playwright.dev/docs/locators) into your test.
+
+> 🦉 There's no `findBy*` and `queryBy*` methods in Vitest Browser Mode. All selectors are `getBy*` that now resolves to locators instead of concrete HTML elements. Think of it as a promise to an element instead of its immediate reference.
+
+This means that `page.getByText('file.txt')` gives you a _locator_ to find that element when you need to. For example, you can access the exact HTML element by calling the `.element()` method on the locator:
+
+```tsx
+// Get a single element for the locator.
+const text = page.getByText('hello world') // Locator
+text.element() // HTMLElement
+
+// Get all the elements for the locator (i.e. `getAllBy*`).
+const buttons = page.getByRole('button') // Locator
+text.elements() // [HTMLElement]
+```
+
+That being said, you don't normally deal with HTML elements directly. Instead, you rely on built-in interactions and assertions that Vitest provides.
+
+## Element assertions
+
+The last thing remaining is to adjust the assertions around the rendered elements on the page.
+
+This is how my assertions looked like before:
+
+```tsx filename=file-preview.test.tsx
+expect(screen.getByText('file.txt')).toBeTruthy()
+expect(screen.getByText('hello world')).toBeTruthy()
+```
+
+Since I know that `.getBy*` methods now return _locators_, they **will always be truthy**. I need to assert on the elements, not locators. To do that, Vitest provides the `expect.element()` API:
+
+```tsx filename=file-preview.test.tsx remove=1-2 add=3-4
+expect(screen.getByText('file.txt')).toBeTruthy()
+expect(screen.getByText('hello world')).toBeTruthy()
+expect.element(screen.getByText('file.txt')).toBeTruthy()
+expect.element(screen.getByText('hello world')).toBeTruthy()
+```
+
+Before, I was asserting on the HTML element being truthy, which, in itself, isn't a useful assertion to have because it's not written from the user's perspective.
+
+// TODO: Finish this.

@@ -17,6 +17,9 @@
       "path": "exercises/01.sunsetting-jsdom/02.solution.under-the-hood"
     },
     {
+      "path": "exercises/02.vitest-browser-mode/01.problem.installation-and-setup"
+    },
+    {
       "path": "exercises/02.vitest-browser-mode/01.solution.installation-and-setup"
     },
     {

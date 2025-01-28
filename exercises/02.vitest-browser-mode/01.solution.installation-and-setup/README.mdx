@@ -1,71 +1,11 @@
 # Installation and setup
 
-## Install dependencies
+That's it! :tada: You have everything you need to finally start testing my browser code in the browser. Now, it's time to refactor the existing test to leverage the beauty of Vitest Browser Mode.
 
-As the first order of business, I'm going to uninstall the packages I won't be needing anymore:
+## Related materials
 
-```sh
-npm uninstall jsdom @testing-library/react
-```
+Here are a few links that can help you get a grasp over the Vitest's configuration:
 
-> 🦉 I am uninstalling React Testing Library because I won't be using it directly for my in-browser tests. **That doesn't mean its API and practices are gone!** Instead, I will continue using them through the Vitest and Playwright APIs that are inspired by RTL and promote its best practices.
-
-Now I can install the dependencies required for the Browser Mode in Vitest:
-
-```sh
-npm i -D @vitest/browser vitest-browser-react playwright
-```
-
-Let's break down what these packages do:
-
-- [`@vitest/browser`](https://www.npmjs.com/package/@vitest/browser) enables the browser mode and provides the bindings to interact with the underlying browser;
-- [`vitest-browser-react`](https://www.npmjs.com/package/vitest-browser-react) provisions rendering of React components (similar to `@testing-library/react`);
-- [`playwright`](https://www.npmjs.com/package/playwright) will serve as the actual browser automation (a browser provider) that Vitest will use to run tests.
-
-The installation step is done, and now it's time to configure Vitest is it can run my component tests in the actual browser.
-
-## Configure Vitest
-
-To enable the Browser Mode in Vitest, I need to set `test.browser.enabled` to `true` in my `vite.config.ts`/`vitest.config.ts`:
-
-```ts add=9-11
-/// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-export default defineConfig({
-	plugins: [react()],
-	test: {
-		globals: true,
-		browser: {
-			enabled: true,
-		},
-	},
-})
-```
-
-As the next step, I need to tell Vitest what browsers I want for testing my components. Let's use Chromium by setting the `test.browser.instances` correctly:
-
-```ts add=10-14
-/// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-export default defineConfig({
-	plugins: [react()],
-	test: {
-		browser: {
-			enabled: true,
-			instances: [
-				{
-					browser: 'chromium',
-				},
-			],
-		},
-	},
-})
-```
-
-> 🦉 You can configure _multiple browser instances_ to execute your component tests. This is handy for solid cross-browser code coverage.
-
-That's it! :tada: I have everything I need to finally start testing my browser code in the browser. Now, it's time to refactor the existing test to leverage the beauty of Vitest Browser Mode.
+- [Getting started with Vitest Browser Mode](https://vitest.dev/guide/browser/)
+- [`browser` configuration reference](https://vitest.dev/guide/browser/config.html)
+- [Configuring Playwright](https://vitest.dev/guide/browser/playwright.html)
