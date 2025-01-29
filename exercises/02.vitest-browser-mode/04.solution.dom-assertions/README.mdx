@@ -1,7 +1,0 @@
-# DOM assertions
-
-Problem: The `.toBeTruthy()` assertion isn't telling us much about the expectations. Let's use proper DOM assertions!
-
-0. Mention that Vitest bundles `@testing-library/jest-dom` so you get DOM assertions like `.toBeVisible()` out of the box!
-1. Extend `tsconfig.test.json` with `types` set to `@vitest/browser/matchers` so it picks up the type definitions.
-1. Adjust the test to use proper assertions instead of `.toBeTruthy()`.

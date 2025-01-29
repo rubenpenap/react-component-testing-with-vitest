@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "exercises_02.vitest-browser-mode_06.solution.multiple-workspaces",
+  "name": "exercises_02.vitest-browser-mode_05.solution.multiple-workspaces",
   "scripts": {
     "dev": "vite",
     "test": "vitest"
