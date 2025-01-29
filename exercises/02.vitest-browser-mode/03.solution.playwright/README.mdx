@@ -6,3 +6,7 @@ Problem: Using the default `preview` provider in Vitest is great to try things o
 1. Install `playwright`.
 1. Run `npx playwright install --with-deps chromium` and configure your repo so this runs automatically (this can be quite annoying). Also, install just the browsers we need, not all of them, to save time on CI.
 1. Update the Vitest configuration to use `playwright` as the browser automation tool.
+
+---
+
+// TODO: Mention `"types": ["@vitest/browser/providers/playwright"]` in `tsconfig.node.json` to have `.toBeVisible()` and other nice browser assertions!

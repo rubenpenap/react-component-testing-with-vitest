@@ -1,11 +1,5 @@
 # Migrate the test
 
-1. Use `render` from `vitest-browser-react` to render the component now.
-1. Use `page` from `@vitest/browser/context` to select elements on the page for interactions and assertions.
-1. Since `page.getBy*` now returns ` Locator` object, adjust `expect` to be `expect.element(locator)` and await its assertions as they are async now.
-
----
-
 While component tests in Vitest Browser Mode are extremely similar to those you used to write in JSDOM, there are a couple of key differences around component rendering, selecting elements on the page, and writing assertions.
 
 ## Rendering
@@ -71,24 +65,50 @@ That being said, you don't normally deal with HTML elements directly. Instead, y
 
 ## Element assertions
 
-The last thing remaining is to adjust the assertions around the rendered elements on the page.
+Finally, it's time to adjust the assertions around the elements rendered by our `<FilePreview />` component.
 
-This is how my assertions looked like before:
+This is how they looked like before:
 
 ```tsx filename=file-preview.test.tsx
-expect(screen.getByText('file.txt')).toBeTruthy()
-expect(screen.getByText('hello world')).toBeTruthy()
+expect(page.getByText('file.txt')).toBeTruthy()
+expect(page.getByText('hello world')).toBeTruthy()
 ```
 
-Since I know that `.getBy*` methods now return _locators_, they **will always be truthy**. I need to assert on the elements, not locators. To do that, Vitest provides the `expect.element()` API:
+There's a few things to change here.
 
-```tsx filename=file-preview.test.tsx remove=1-2 add=3-4
-expect(screen.getByText('file.txt')).toBeTruthy()
-expect(screen.getByText('hello world')).toBeTruthy()
-expect.element(screen.getByText('file.txt')).toBeTruthy()
-expect.element(screen.getByText('hello world')).toBeTruthy()
+Now that I know that `page.getBy*` functions return _locators_, they will always be truthy and so the `.toBeTruthhy()` assertion makes little sense here. It wasn't written from the user's perspective, to begin with, and it would be best to use a more fitting matcher like `.toBeVisible()`:
+
+```tsx filename=file-preview.test.tsx
+expect(page.getByText('file.txt')).toBeVisible()
+//                                 ^^^^^^^^^^^^^
+expect(page.getByText('hello world')).toBeVisible()
+//                                    ^^^^^^^^^^^^^
 ```
 
-Before, I was asserting on the HTML element being truthy, which, in itself, isn't a useful assertion to have because it's not written from the user's perspective.
+On its own, this is enough. But there's one more thing that can make these assertions stellar. I can use `expect.element()` instead of `expect()` to have a built-in retry for resolving the given locators:
 
-// TODO: Finish this.
+```tsx filename=file-preview.test.tsx
+await expect.element(page.getByText('file.txt')).toBeVisible()
+//           ^^^^^^^
+await expect.element(page.getByText('hello world')).toBeVisible()
+//           ^^^^^^^
+```
+
+This reads as "_I eventually expect an element with text 'hello world' to be visible on the page_", which is exactly the case!
+
+> 🦉 `expect.element()` is a shorthand for `expect.poll(() => element)`, which retries any given assertion until it passes within a fixed time window (similar to `waitFor()` or `findBy*`). Since it's an eventual result, this method returns a promise that you have to await.
+
+## Running tests
+
+Now that I've updated the test suite, I can see it passing once I run `npm test`:
+
+```
+ chromium  Browser runner started at http://localhost:63315/
+
+ ✓  chromium  src/file-preview.test.tsx (1 test) 60ms
+   ✓ displays the preview card
+```
+
+:tada:
+
+But there's still a couple of things we can improve in the setup. Let's explore those in the following exercises.

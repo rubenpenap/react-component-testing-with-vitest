@@ -15,14 +15,13 @@ npm uninstall jsdom @testing-library/react
 Now I can install the dependencies required for the Browser Mode in Vitest:
 
 ```sh
-npm i -D @vitest/browser vitest-browser-react playwright
+npm i -D @vitest/browser vitest-browser-react
 ```
 
 Let's break down what these packages do:
 
 - [`@vitest/browser`](https://www.npmjs.com/package/@vitest/browser) enables the browser mode and provides the bindings to interact with the underlying browser;
 - [`vitest-browser-react`](https://www.npmjs.com/package/vitest-browser-react) provisions rendering of React components (similar to `@testing-library/react`);
-- [`playwright`](https://www.npmjs.com/package/playwright) will serve as the actual browser automation (a browser provider) that Vitest will use to run tests.
 
 The installation step is done, and now it's time to configure Vitest is it can run my component tests in the actual browser.
 
@@ -68,8 +67,26 @@ export default defineConfig({
 })
 ```
 
-> 🦉 You can configure _multiple browser instances_ to execute your component tests. This is handy for solid cross-browser code coverage.
+> 🦉 You can configure _multiple browser instances_ to execute your component tests. This is handy for solid cross-browser code coverage. You will learn how to use browser providers later in this workshop.
 
-// TODO: Mention `"types": ["@vitest/browser/providers/playwright"]` in `tsconfig.node.json` to have `.toBeVisible()` and other nice browser assertions!
+## Configure TypeScript
 
-This concludes the installation step!
+The last thing that remains is to extend the TypeScript configuration to recognize DOM-specific matches, like `expect().toBeVisible()` as they come built-in in Vitest.
+
+```json filename=tsconfig.test.json add=10
+{
+	"extends": "./tsconfig.base.json",
+	"include": ["vite.config.ts", "**/*.test.ts*"],
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "preserve",
+		"types": [
+			"vitest/globals",
+			// 👇
+			"@vitest/browser/matchers"
+		]
+	}
+}
+```
+
+And with that, the installation step is done!

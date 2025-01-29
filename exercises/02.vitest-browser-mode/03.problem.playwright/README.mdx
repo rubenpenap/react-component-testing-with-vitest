@@ -1,0 +1,26 @@
+# Playwright
+
+The first thing that we can improve is the _browser provider_ used to run our tests. By default, Vitest uses the `preview` provider, which is a great way to get started with the Browser Mode quickly but is not something you would want to use in your application.
+
+The default `preview` provider has a few intentional limitations:
+
+- It relies on the installed browser executables, which means it will fail on CI unless you have those browsers installed;
+- It simulates browser events instead of relying on Chrome DevTools Protocol.
+
+Those are quite important, and so it's recommended to use a designated browser provider both for to run tests locally and have them running on CI.
+
+Currently, Vitest supports two browser providers: [`playwright`](https://npmjs.com/package/playwright) and [`webdriverio`](https://www.npmjs.com/package/webdriverio). Your browser provider affects multiple things:
+
+- The actual browser(s) used to run your tests;
+- Options available in `test.browser` in `vite.config.ts`;
+- The underlying API used by the `page` object in `@vitest/browser/context`.
+
+In this workshop, we will be using Playwright as the browser provider for Vitest, but the steps involved are much the same if you choose to use WebdriverIO instead.
+
+👨‍💼 Your task is to introduce Playwright to the existing Vitest setup. It will consist of multiple steps:
+
+1. Install `playwright` as a dependency in the project;
+1. Update `test.browser.provider` to use Playwright as the browser provider;
+1. Update `tsconfig.test.json` to use the type definitions from Playwright for `expect()` matchers.
+
+Once you are done with it, make sure that the tests are still passing by running `npm test`. Good luck!

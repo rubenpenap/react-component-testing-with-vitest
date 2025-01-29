@@ -23,7 +23,13 @@
       "path": "exercises/02.vitest-browser-mode/01.solution.installation-and-setup"
     },
     {
+      "path": "exercises/02.vitest-browser-mode/02.problem.migrate-the-test"
+    },
+    {
       "path": "exercises/02.vitest-browser-mode/02.solution.migrate-the-test"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/03.problem.playwright"
     },
     {
       "path": "exercises/02.vitest-browser-mode/03.solution.playwright"
