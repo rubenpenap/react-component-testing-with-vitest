@@ -1,7 +1,49 @@
 # Shared assets
 
-Problem: the component we render kind of looks broken. It has no styles. It doesn't look like what we render in the app.
+There are two types of test setup you can have: _global_ and _local_. The global setup applies to all tests, while the local one can be introduced on a test suite or a test case basis. I would like to include some shared assets, like styles, to apply to _all_ component tests, which means I need a global setup.
 
-1. Create a custom `vitest.browser.context.ts` file.
-1. Import the assets you want to be included with each test here. E.g. `import './src/index.css'`.
-1. Include `vitest.browser.context.ts` in `vite.config.ts` (`test.browser.instances[i].setupFiles`).
+I will start by creating a `vitest.browser.setup.ts` file. The naming here doesn't matter that much, but I like to keep Vitest-related files starting with `vitest.*`.
+
+In that file, I will import the assets I want to apply to all rendered components:
+
+```ts filename=vitest.browser.setup.ts add=1
+import './src/index.css'
+```
+
+To make Vite process this file the same way it does the rest of my application, I need to include a type reference to `vite-env.d.ts`:
+
+```ts filename=vitest.browser.setup.ts add=1
+/// <reference path="./src/vite-env.d.ts" />
+import './src/index.css'
+```
+
+Now all that remains is to tell Vitest to use this file as the global setup for the Browser Mode.
+
+In `vite.config.ts`, I will provide the path to this setup file as the value for the `setupFiles` property on the current browser instance:
+
+```ts filename=vite.config.ts add=15
+/// <reference types="vitest" />
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+	plugins: [react()],
+	test: {
+		globals: true,
+		browser: {
+			enabled: true,
+			provider: 'playwright',
+			instances: [
+				{
+					browser: 'chromium',
+					setupFiles: ['./vitest.browser.setup.ts'],
+				},
+			],
+		},
+	},
+})
+```
+
+If I run my tests now, I will see that the styles are applied to the rendered component correctly! :tada:
+
+![A screenshot of the Vitest UI showing the file preview component with the styles applied](/assets/02-04-solution.png)

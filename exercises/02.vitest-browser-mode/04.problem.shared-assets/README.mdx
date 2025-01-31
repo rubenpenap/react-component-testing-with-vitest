@@ -1,0 +1,25 @@
+# Shared assets
+
+Our Vitest is configured and running, but if you take a closer look at the tested component on the page, it seems kind of off:
+
+![A screenshot of the Vitest UI showing the file preview component missing the styles](/assets/02-04-problem.png)
+
+Well, that's because it has no styles! The CSS file that contains the styles for this component is imported all the way in `main.tsx`, which isn't rendered as a part of this test:
+
+```tsx filename=file-preview.test.tsx nonumber
+render(<FilePreview file={...} />)
+```
+
+That's quite an oversight. Styling is important, not only to see the UI as the user would see it, but also because improper styles can lead to inaccessible elements in the DOM.
+
+I think this is a great problem for you to fix!
+
+👨‍💼 In this exercise, you will create a custom browser setup file that will run as a global setup for all component tests.
+
+First, create a <InlineFile file="vitest.browser.setup.ts">`vitest.browser.setup.ts`</InlineFile> file. In that file, import any assets you wish to apply to _all tests_ (e.g. CSS).
+
+> 🦉 To make Vite process the browser setup file like it does the rest of the app, include the following type reference at the top of the setup file: `/// <reference path="./src/vite-env.d.ts" />`.
+
+Lastly, provide the path to the setup file in <InlineFile file="vite.config.ts">`vite.config.ts`</InlineFile> as the `setupFiles` value of a conrete browser instance (follow the instructions in the configuration file for more details).
+
+Once you have it ready, run the tests again to see the `<FilePreview />` component reclaim its striking visuals ✨.

@@ -69,7 +69,7 @@ Finally, it's time to adjust the assertions around the elements rendered by our 
 
 This is how they looked like before:
 
-```tsx filename=file-preview.test.tsx
+```tsx filename=file-preview.test.tsx nonumber
 expect(page.getByText('file.txt')).toBeTruthy()
 expect(page.getByText('hello world')).toBeTruthy()
 ```
@@ -78,7 +78,7 @@ There's a few things to change here.
 
 Now that I know that `page.getBy*` functions return _locators_, they will always be truthy and so the `.toBeTruthhy()` assertion makes little sense here. It wasn't written from the user's perspective, to begin with, and it would be best to use a more fitting matcher like `.toBeVisible()`:
 
-```tsx filename=file-preview.test.tsx
+```tsx filename=file-preview.test.tsx nonumber
 expect(page.getByText('file.txt')).toBeVisible()
 //                                 ^^^^^^^^^^^^^
 expect(page.getByText('hello world')).toBeVisible()
@@ -87,7 +87,7 @@ expect(page.getByText('hello world')).toBeVisible()
 
 On its own, this is enough. But there's one more thing that can make these assertions stellar. I can use `expect.element()` instead of `expect()` to have a built-in retry for resolving the given locators:
 
-```tsx filename=file-preview.test.tsx
+```tsx filename=file-preview.test.tsx nonumber
 await expect.element(page.getByText('file.txt')).toBeVisible()
 //           ^^^^^^^
 await expect.element(page.getByText('hello world')).toBeVisible()
@@ -102,7 +102,7 @@ This reads as "_I eventually expect an element with text 'hello world' to be vis
 
 Now that I've updated the test suite, I can see it passing once I run `npm test`:
 
-```
+```txt nonumber nocopy
  chromium  Browser runner started at http://localhost:63315/
 
  ✓  chromium  src/file-preview.test.tsx (1 test) 60ms
