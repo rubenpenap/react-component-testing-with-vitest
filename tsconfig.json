@@ -41,6 +41,9 @@
       "path": "exercises/02.vitest-browser-mode/04.solution.shared-assets"
     },
     {
+      "path": "exercises/02.vitest-browser-mode/05.problem.multiple-workspaces"
+    },
+    {
       "path": "exercises/02.vitest-browser-mode/05.solution.multiple-workspaces"
     },
     {

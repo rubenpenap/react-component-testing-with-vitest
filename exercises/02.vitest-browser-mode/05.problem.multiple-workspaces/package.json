@@ -1,11 +1,9 @@
 {
   "type": "module",
-  "name": "exercises_02.vitest-browser-mode_05.solution.multiple-workspaces",
+  "name": "exercises_02.vitest-browser-mode_05.problem.multiple-workspaces",
   "scripts": {
     "dev": "vite",
-    "test": "vitest",
-    "test:unit": "vitest --project=unit",
-    "test:integration": "vitest --project=browser"
+    "test": "vitest"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -14,7 +12,6 @@
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.1.0",
-    "@types/node": "^22.10.6",
     "@types/react": "^19.0.6",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",

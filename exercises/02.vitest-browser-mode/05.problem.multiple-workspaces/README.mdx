@@ -1,0 +1,32 @@
+# Multiple workspaces
+
+The way you have Vitest configured right now will run _all tests_ using the Browser Mode. This may be not what you want, especially if you are using Vitest for unit testing or integration testing in Node.js in the same project that needs in-browser component tests as well.
+
+You can fix this by introducing _different workspaces_ for differnt types of tests. In fact, I think this is just the right task for you...
+
+👨‍💼 In this one, you will expand on the Vitest configuration to support running multiple types of tests in the same project. This will be a multi-step process to make sure you have the Vitest and TypeScript configured correctly for your tests.
+
+🐨 First, update <InlineFile file="vite.config.ts">`vite.config.ts`</InlineFile> to list multiple [workspaces](https://main.vitest.dev/guide/workspace.html#configuration). Define one for unit tests and the other for component tests.
+
+🐨 Next, rename <InlineFile file="tsconfig.test.json">`tsconfig.test.json`</InlineFile> to `tsconfig.test.browser.json`. This TypeScript configuration will apply only to the component tests now.
+
+🐨 To have proper type-checking in unit tests, create a new <InlineFile file="tsconfig.test.unit.json">`tsconfig.test.unit.json`</InlineFile> file and list there the properties necessary for the unit tests. You can use this as an example:
+
+```json filename=tsconfig.test.unit.json
+{
+	"extends": "./tsconfig.base.json",
+	"include": ["**/*.test.ts*"],
+	"exclude": ["**/*.browser.test.ts*"],
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "preserve",
+		"types": ["node", "vitest/globals"]
+	}
+}
+```
+
+🐨 You might've noticed that this config relies on `@types/node` to expose Node.js type in unit tests, but that dependency is missing! Install `@types/node` as a dev dependency to fix that.
+
+🐨 Finally, rename the existing `file-preview.test.tsx` component test to `file-preview.browser.test.tsx` to be picked up by the proper workspace in Vitest.
+
+See you on the other side once you're done to go through each step in more detail.
