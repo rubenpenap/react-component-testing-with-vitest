@@ -11,12 +11,6 @@
       "path": "exercises/01.sunsetting-jsdom/01.solution.break-jsdom"
     },
     {
-      "path": "exercises/01.sunsetting-jsdom/02.problem.under-the-hood"
-    },
-    {
-      "path": "exercises/01.sunsetting-jsdom/02.solution.under-the-hood"
-    },
-    {
       "path": "exercises/02.vitest-browser-mode/01.problem.installation-and-setup"
     },
     {
