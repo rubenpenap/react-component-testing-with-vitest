@@ -1,8 +1,226 @@
-# Accessibility selectors
+# Queries
 
-Now that we have MSW set up, let's write some tests for the Discount code form! For that, we will need to select elements and interact with them just like our users would.
+I'm going to start by locating the discount code input on the page. This one:
 
-- Why accessibility selectors matter?
-- Why not `test-id`?
-- Implicit benefits of selectors (validate the accessibility of your markup; you cannot force your way to things the user cannot "see" on the page)
-- Show how to see if an element has an _accessible name_. You can use Chrome devtools for that.
+```tsx filename=discount-code-form.tsx highlight=4-12 nocopy nonumber
+<label htmlFor="discountCode" className="mb-1 block">
+	Discount code
+</label>
+<input
+	id="discountCode"
+	name="discountCode"
+	className="w-full rounded-md border px-2 py-1 focus:ring-4"
+	placeholder="ABCD1234"
+	pattern="[A-Z]{4}[0-9]{4}"
+	autoComplete="off"
+	required
+/>
+```
+
+A user would find this input by its _label text_ because they would see that it says "Discount code" above that input. When creating the `<DiscountCode />` component, I've made sure to have an accessible layout by associating a `label` element with the input by its `id`:
+
+```tsx filename=discount-code-form.tsx highlight=2,8
+<label
+	htmlFor="discountCode"
+	className="mb-1 block"
+>
+	Discount code
+</label>
+<input
+	id="discountCode"
+	name="discountCode"
+	className="w-full rounded-md border px-2 py-1 focus:ring-4"
+	placeholder="ABCD1234"
+	pattern="[A-Z]{4}[0-9]{4}"
+	autoComplete="off"
+	required
+/>
+```
+
+I can then select this input by using the `.getByLabelText()` method on the `page` object from `@vitest/browser/context`:
+
+```ts filename=discount-code-form.browser.test.tsx highlight=3 nonumber
+import { page } from '@vitest/browser/context'
+
+const discountInput = page.getByLabelText('Discount code')
+```
+
+> 🦉 The `.getByLabelText()` query looks up an element by the label text associated with that element. The label text can be the text of an explicit `<label>` associated with the element or the element's `aria-label` attribute value.
+
+Now to make sure that the input is visible for the user, I will write an assertion using `expect.element()` and the `.toBeVisible()` matcher:
+
+```ts filename=discount-code-form.browser.test.tsx nonumber
+await expect.element(discountInput).toBeVisible()
+```
+
+So far so good!
+
+Next on the list is the button that makes the whole form do something—the submit button. While I can select it by its text `'Apply discount'`, that would be quite a broad query. There can be _multiple elements_ with that same text on the page (e.g. a heading that also says "Apply discount"). A far more important desctiptor for this element is that _it is a button_.
+
+With that in mind, I will locate the button by its role and then its accessible name:
+
+```ts filename=discount-code-form.browser.test.tsx highlight=1 nonumber
+const applyDiscountButton = page.getByRole('button', {
+	name: 'Apply discount',
+})
+```
+
+> 🦉 The `.getByRole()` query looks up an element (or elements) by its role. Additionally, you can narrow down the selector to include the element's accessible `name` (don't confuse with the element's text!).
+
+And in the similar fashion, I will add an assertion for the submit button's presence on the page:
+
+```ts filename=discount-code-form.browser.test.tsx nonumber
+await expect.element(applyDiscountButton).toBeVisible()
+```
+
+This concludes this test case, but there's more when it comes to the best practices of writing queries. Let's take a close look at those.
+
+---
+
+## Choosing queries
+
+When testing your components, you may find yourself in a position where multiple queries can be used to target an element. Or, in an opposite twist of events, you may be unsure which query to use at all.
+
+In either case, there's a rule of thumb that you can follow:
+
+<callout-success>Always prefer more specific queries.</callout-success>
+
+Query specificity is similar to specificity of CSS selectors. For example, the `div` selector is not very specific as there can be multiple `<div>` elements on the page, while the `#header` selector is highly specific, pointing to a single element with that ID.
+
+Element queries in your component tests are much the same. You can grade them by specificity:
+
+1. 🏆 [`getByRole()`](https://main.vitest.dev/guide/browser/locators.html#getbyrole)
+1. [`getByLabelText()`](https://main.vitest.dev/guide/browser/locators.html#getbylabeltext)
+1. [`getByPlaceholder()`](https://main.vitest.dev/guide/browser/locators.html#getbyplaceholder)
+1. [`getByText()`](https://main.vitest.dev/guide/browser/locators.html#getbytext#)
+1. [`getByAltText()`](https://main.vitest.dev/guide/browser/locators.html#getbyalttext)
+1. [`getByTitle()`](https://main.vitest.dev/guide/browser/locators.html#getbytitle)
+
+<callout-danger>[`getByTestId()`](https://main.vitest.dev/guide/browser/locators.html#getbytestid) is generally discouraged. It is not accessible and doesn't resemble how your users perceive the page. You are better off with a more specific query 99% of the time.</callout-danger>
+
+## Accessible name vs text content
+
+The `getByRole()` query allows you to specify the _accessible `name`_ of an element. It's important to stress that accessible name and element's text content _are not the same thing_.
+
+### Accessible name
+
+[Accessible name](https://developer.mozilla.org/en-US/docs/Glossary/Accessible_name) is the name of an element that describes its purpose or intent. A lot of HTML elements get their accessible name from their text content:
+
+```tsx nonumber
+<a href="/">Homepage</a>
+page.getByRole('link', { name: 'Homepage' })
+
+<button>Add to cart</button>
+page.getByRole('button', { name: 'Add to cart' })
+```
+
+But there are also elements that don't. Some derive their accessible name from text content of associated elements (like `<input>` gets it name from the associated `<label>` text) while others get it from its attributes (e.g. the name for an `<img>` is taken from its `alt` attribute).
+
+> 📜 Learn more about where different HTML elements get their accessible names in the [Accessible name calculation](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/#name_calculation).
+
+And then there are elements that don't need accessible name at all. Those include `<section>`, `<p>`, `<span>`, or images that are purelly illustrational.
+
+<callout-success>Select elements by their accessible name if it has one, otherwise select it by their text content. Do not add ARIA role attributes or accessible names where they are not needed! The goal is always accessible layout first, tests second. Never the other way around. See [Naming techniques](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/#naming_techniques) for more details.</callout-success>
+
+### Text content
+
+Text, or child content is the inner text of an element:
+
+```tsx nonumber
+<p>Welcome back!</p>
+page.getByRole('???', { name: 'Welcome back!' }) // ❌
+page.getByText('Welcome back!) // ✅
+```
+
+> General text elements do not have a role or an accessible name, so selecting them by text is your best option.
+
+By-text queries are tremendously useful to locate elements the user (or a screen reader) would locate by their text content.
+
+That being said, note that some text elements _can have specialized roles_, and in that case you should prefer `getByRole()`:
+
+```tsx nonumber
+<p role="alert">Subscription canceled</p>
+```
+
+> 🦉 While this paragraph has an explicit `alert` role to announce important change to the user, **it still doesn't have an accessible name**.
+
+## Looking up roles and names
+
+This all may seem a bit overwhelming. Don't worry, you are not required to learn the whole ARIA specification by heart. Start small and improve as you go.
+
+To help you on that journey, remember that you can observe the list of roles and accessible names for the markup your components are rendering right now. This can help tremendously, especially when you cannot figure out why your test fails to locate a seemingly present element.
+
+You can list the accessible roles and names in two ways: directly in your test, and in your browser's DevTools.
+
+In your tests, take advantage of the `logRoles()` function from the `@testing-library/dom` package:
+
+```tsx highlight=1,15
+import { logRoles } from '@testing-library/dom'
+
+test('renders the navigation', () => {
+	render(
+		<nav>
+			<ul>
+				<li>
+					<a href="/">Home</a>
+					<a href="/blog">Blog</a>
+				</li>
+			</ul>
+		</nav>,
+	)
+
+	logRoles()
+})
+```
+
+```txt highlight=1,3,7,9,13,15,19,21,26
+navigation:
+
+Name "":
+<nav />
+
+--------------------------------------------------
+list:
+
+Name "":
+<ul />
+
+--------------------------------------------------
+listitem:
+
+Name "":
+<li />
+
+--------------------------------------------------
+link:
+
+Name "Home":
+<a
+  href="/"
+/>
+
+Name "Blog":
+<a
+  href="/blog"
+/>
+
+--------------------------------------------------
+```
+
+This prints you a list of element _roles_ and their _accessible names_ to use in your test.
+
+Some browsers provide you the devtools to help you see the accessible tree of your application. For example, in Chrome you can go to "_Elements -> Accessibility_" (in the dropdown menu next to "Styles" and "Computed") to see all the available roles and names rendered in your application:
+
+![Screenshot of Chrome DevTools showing the open Accessibility tab with the list of rendered accessible roles and names on the page](/assets/03-01-accessibility-devtools.png)
+
+> 🦉 Learn more about the [Accessibility features](https://developer.chrome.com/docs/devtools/accessibility/reference) in Chrome.
+
+## Role of accessibility in testing
+
+The grand question here might be: _Why go through all of this just to write some tests?_
+
+But here's the thing. Nothing you've just learned is about testing. **It's about accessibility**. Tools like Vitest Browser Mode or React Testing Library simply leverage accessible markup, encouraging you to write one.
+
+At worst, you are getting a test that is decoupled from its implementation details. Accessibility roles, names, and attributes _are not implementation details_ because you aren't writing them for yourself. You are writing them for your users. Your component must have its accessible elements regardless of how it's implemented, and so should your tests.
+
+At best, you are getting implicit accessibility testing for free. Forgot to set the `for` attribute on the `<label>`? Oops, the test is failing because nobody can access that associated input anymore!
