@@ -1,8 +1,129 @@
 # User events
 
-- How to interact with the elements in the UI.
-- Remove the previous `.toBeVisible()` assertions from the input and the button because interacting with those elements _implies_ they are visible and accessible (implicit assertions WTF!).
+At its current state, our discount form component test gives you some value, but it can give much more. We don't create UI elements simply for them "to be" on the page. They are there so our users could interact with them, make them do something, help them achieve their tasks.
 
-## Materials
+The main purpose of the discount form component is to apply the given discount code. _That_ is what has to be reflected in automated tests.
 
-- [Implicit assertions](https://www.epicweb.dev/implicit-assertions)
+In the `discount-code-form.browser.test.tsx`, I will start by renaming the test case to reflect what I am testing here.
+
+```tsx filename=discount-code-form.browser.test.tsx remove=1 add=2 nocopy
+test('renders the discount form', async () => {
+test('applies a discount code', async () => {
+```
+
+Then, I am going to remove the following visibility assertion:
+
+```tsx filename=discount-code-form.browser.test.tsx remove=5 nocopy
+test('applies a discount code', async () => {
+	render(<DiscountCodeForm />)
+
+	const discountInput = page.getByLabelText('Discount code')
+	await expect.element(discountInput).toBeVisible()
+```
+
+I intend to _interact_ with the `discountInput` element so asserting its visibility on the page becomes redundant. Its interactivity is _implied_ by the interaction. If this input is, say, not being rendered correctly, interacting with it will fail. This is called an _implicit assertion_.
+
+> 🦉 [Implicit assertions](https://www.epicweb.dev/implicit-assertions) are a great way to achieve more in tests while writing less.
+
+To actually enter the discount code into the input, I will use the `.fill()` method on that element's locator:
+
+```tsx filename=discount-code-form.browser.test.tsx add=5 nocopy
+test('applies a discount code', async () => {
+	render(<DiscountCodeForm />)
+
+	const discountInput = page.getByLabelText('Discount code')
+	await discountInput.fill('EPIC2025')
+```
+
+The `.fill()` method accepts a _value_ to enter and returns a promise that resolves when the browser is done typing it in.
+
+Now that the discount code has been entered, it's time to apply it.
+
+Much the same, I will drop the redundant visibility assertiom from the `applyDiscountCode` button, and replace it with the `.click()` interaction with that button:
+
+```tsx filename=discount-code-form.browser.test.tsx remove=10 add=11 nocopy
+test('applies a discount code', async () => {
+	render(<DiscountCodeForm />)
+
+	const discountInput = page.getByLabelText('Discount code')
+	await discountInput.fill('EPIC2025')
+
+	const applyDiscountButton = page.getByRole('button', {
+		name: 'Apply discount',
+	})
+	await expect.element(applyDiscountButton).toBeVisible()
+	await applyDiscountButton.click()
+```
+
+Clicking on the button submits the discount form, making it do whatever it has to do to apply the given discount code. All that's left for me is to assert that the applied code is correctly displayed to the user.
+
+My expectation here is derived from _how_ the applied discount code is displayed. If I take a look at the <InlineFile file="./src/discount-code-form.tsx">`discount-code-form.tsx`</InlineFile> component, I can see that the code gets displays like so:
+
+```tsx file=discount-code-form.tsx highlight=2-5 nonumber
+{appliedDiscount ? (
+	<p>
+		Discount: <strong>{appliedDiscount.code}</strong> (-
+		{appliedDiscount.amount}%)
+	</p>
+) : {
+	/* ... */}
+)
+```
+
+So, in case the code has been successfully applied, I expect this paragraph to be visible on the page:
+
+```tsx filename=discount-code-form.browser.test.tsx add=13-15 nocopy
+test('applies a discount code', async () => {
+	render(<DiscountCodeForm />)
+
+	const discountInput = page.getByLabelText('Discount code')
+	await discountInput.fill('EPIC2025')
+
+	const applyDiscountButton = page.getByRole('button', {
+		name: 'Apply discount',
+	})
+	await expect.element(applyDiscountButton).toBeVisible()
+	await applyDiscountButton.click()
+
+	await expect
+		.element(page.getByText('Discount: EPIC2025 (-20%)'))
+		.toBeVisible()
+})
+```
+
+This completes the test! 🎉
+
+## Locator methods vs `userEvent`
+
+If you used React Testing Library in the past, you've likely been interacting with your components via the `userEvent` object from `@testing-library/user-event`. Vitest provides you a similar object from the `@vitest/browser/context` package as well:
+
+```tsx nonumber highlight=1,7
+import { userEvent } from '@vitest/browser/context',
+
+test('applies a discount code', async () => {
+	const applyDiscountButton = page.getByRole('button', {
+		name: 'Apply discount',
+	})
+	await userEvent.click(applyDiscountButton)
+})
+```
+
+> :scroll: The two `userEvent` objects behave slightly differently. I recommend you read [Interactivity API](https://main.vitest.dev/guide/browser/interactivity-api.html) to learn that difference.
+
+You might have noticed that in this exercise you've used locator methods directly:
+
+```tsx nonumber
+await applyDiscountButton.click()
+```
+
+**Either way is fine**. Vitest binds all `userEvent` actions to the underlying locators, which means that `locator.click()` is translated to `userEvent.click(locator)` under the hood.
+
+Using locator methods directly is a faster way to get common interactivity like clicking or typing. The `userEvent` object _exposes additional interactivity methods_ that are not present as locator methods:
+
+- `.tab()`
+- `.keyboard()`
+- `.upload()`
+- `.cut()` and `.paste()`
+- and [others](https://main.vitest.dev/guide/browser/interactivity-api.html)
+
+<callout-success>Prefer built-in locator methods where availabile, and rely on the `userEvent` methods otherwise.</callout-success>

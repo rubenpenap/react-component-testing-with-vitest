@@ -1,0 +1,11 @@
+# User events
+
+The way your test interacts with UI elements is just as important as the way it locates them. Naturally, your users don't dispatch events on elements or programmatically access them. They hover, click, type, drag. They do what their input devices allow them to do.
+
+So, how do you bring your tests to do the same? For a long while, integration testing revolved around _simulating_ user events. That was mostly due to the environmental limitations as you cannot really interact with a UI element in Node.js.
+
+**But your component tests aren't running in Node.js anymore**. Being in the real browser also means utlizing real user events. Actually hovering, clicking, typing, or dragging. One more benefit to reap from testing the code where it's supposed to run.
+
+👨‍💼 This exercises has the following task for you in store: complete the automated test at <InlineFile file="./src/discount-code-form.browser.test.tsx">`discount-code-form.browser.test.tsx`</InlineFile> to enter a discount code, submit it, and assert that it has actually been applied (i.e. became visible as applied in the UI).
+
+Give it your best and see you in the solution to this exercise!

@@ -47,6 +47,9 @@
       "path": "exercises/03.best-practices/01.solution.accessibility-selectors"
     },
     {
+      "path": "exercises/03.best-practices/02.problem.user-events"
+    },
+    {
       "path": "exercises/03.best-practices/02.solution.user-events"
     },
     {
