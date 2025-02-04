@@ -53,6 +53,9 @@
       "path": "exercises/03.best-practices/02.solution.user-events"
     },
     {
+      "path": "exercises/03.best-practices/03.problem.network-mocking"
+    },
+    {
       "path": "exercises/03.best-practices/03.solution.network-mocking"
     },
     {

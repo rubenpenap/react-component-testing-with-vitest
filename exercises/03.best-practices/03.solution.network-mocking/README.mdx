@@ -1,14 +1,135 @@
 # Network mocking
 
-Problem: performing requests to an actual server makes your test dependent on the operability of that server, among other things. Instead, mock the network in your component tests using MSW.
+## Legacy discount scenario
 
-Mocking APIs is a part of the _setup_ so it makes sense we start from it. It unblocks proper testing in the future exercises.
+I will start with the legacy discount code scenario.
 
-**Focus on MSW integration only. We are writing tests in the next exercise.**
+The intention behind this functionality is to display a warning for the user if they have applied a legacy discount code. How do I know if a code is legacy or not? I don't. That's for the server to figure out. My concern is making sure my `<DiscountCodeForm />` component _can handle_ such a response from the server.
 
-## Steps
+I don't want to treat all server responses as those describing a legacy discount code. Instead, I want to create an _override_ that makes it true only for a particular test.
 
-1. Install `msw`.
-1. Init the worker script.
-1. Create `/mocks/handlers.ts` with happy-path handlers, and `/mocks/browser.ts` with the worker.
-1. Create a custom _test context_ in the `test-extend.ts` file. Don't forget about `auto` to enable MSW even when it's not referenced in the test! (to rely on happy path handlers)
+First, I access the `worker` fixture in the argument to the relevant `test()`:
+
+```tsx filename=discount-code-form.browser.test.tsx nocopy nonumber add=3
+test('displays a warning for legacy discount codes', async ({
+	// Access the `worker` fixture we've prepared earlier.
+	worker,
+}) => {})
+```
+
+Next, I will create a new request handler matching the same `POST` request that sends the discount code to the server, but this time, I will _handle it differently_:
+
+```tsx filename=discount-code-form.browser.test.tsx add=2-16
+test('displays a warning for legacy discount codes', async ({ worker }) => {
+	worker.use(
+		http.post<never, string, Discount>(
+			'https://api.example.com/discount/code',
+			async ({ request }) => {
+				const code = await request.text()
+
+				return HttpResponse.json({
+					code,
+					amount: 10,
+					isLegacy: true,
+				})
+			},
+		),
+	)
+
+	render(<DiscountCodeForm />)
+```
+
+> Here, I am using a [request handler override](https://mswjs.io/docs/best-practices/network-behavior-overrides) by giving a new set of request handlers to `worker.use()`. These overrides will take priority over the happy-path handlers I have in `src/mocks/handlers.ts`.
+
+Only in the context of this single test, any submitted discount codes will receive `isLegacy: true` in the server response.
+
+<callout-success>Notice how you don't have to leak any business logic into this mock to test this network-related scenario. _Prefer scoped test cases that run in a clearly defined context_.</callout-success>
+
+But the only way to verify that it works is to add some assertions.
+
+I will add the first assertion around the discount code being applied, since legacy discounts still are:
+
+```tsx filename=discount-code-form.browser.test.tsx
+await expect.element(page.getByText('Discount: LEGA2000 (-10%)')).toBeVisible()
+```
+
+And, finally, one remaining assertion for the warning message regarding the use of a legacy code:
+
+```tsx filename=discount-code-form.browser.test.tsx
+await expect
+	.element(page.getByRole('alert'))
+	.toHaveTextContent('"LEGA2000" is a legacy code. Discount amount halfed.')
+```
+
+> :owl: Since the legacy code warning is a `<p>` text element that doesn't have an accessible name, I am relying on the `.toHaveTextContent()` matcher to both narrow down the locator and assert on the message displayed to the user.
+
+## Error response scenario
+
+Reproducing an error response from the server will follow similar steps. The only things that will differ are the mocked response I will use and the assertions the test will have.
+
+In my request handler override in the error test case, I will respond with a 500 response:
+
+```tsx filename=discount-code-form.browser.test.tsx nocopy nonumber add=2,4-8
+test('displays an error when fetching the discount fails', async ({
+	worker,
+}) => {
+	worker.use(
+		http.post('https://api.example.com/discount/code', () => {
+			return new HttpResponse(null, { status: 500 })
+		}),
+	)
+
+	render(<DiscountCodeForm />)
+```
+
+This makes any attempts to apply a discount code in this test to be met with a server error. Since that's the case, I can model my expectations accordingly once the form is submitted.
+
+```tsx filename=discount-code-form.browser.test.tsx nocopy nonumber
+await expect
+	.element(page.getByRole('alert'))
+	.toHaveTextContent('Failed to apply the discount code')
+```
+
+Here, I am expecting this message to alert the user that applying the discount failed. The `role="alert"` on the message will announce this element for the user so they aren't left confused what happened to their discount.
+
+---
+
+## Reusing the MSW setup
+
+One of the core benefits of using MSW is that you can reuse your request handlers across multiple environments and tools. For example, here are the steps to reuse the same browser integration for local development.
+
+To enable MSW for development in the browser, go to <InlineFile file="./src/main.tsx">`src/main.tsx`</InlineFile> and create a new function called `enableMocking`:
+
+```tsx filename=src/main.tsx add=6-11,13
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import { App } from './app.jsx'
+
+async function enableMocking() {
+	if (process.env.NODE_ENV === 'development') {
+		const { startWorker } = await import('./mocks/browser.js')
+		await startWorker()
+	}
+}
+
+enableMocking().then(() => {
+	createRoot(document.getElementById('root')!).render(
+		<StrictMode>
+			<App />
+		</StrictMode>,
+	)
+})
+```
+
+<callout-success>Wrap the initialization of your app in the `enableMocking()` function to make sure that MSW is ready to handle the network before rendering your application.</callout-success>
+
+This functions does a couple of things:
+
+1. Imports the `./mocks/browser.js` module _conditionally_ to enable MSW only in development;
+1. Calls the `startWorker()` function to actually register and start the Service Worker. This is the same function you've used in `test-extend.ts`!
+
+## Related materials
+
+- [Mock Service Worker documentation](https://mswjs.io/docs)
+- [Test context in Vitest](https://vitest.dev/guide/test-context.html)
