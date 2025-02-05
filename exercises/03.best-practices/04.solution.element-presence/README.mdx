@@ -1,9 +1,50 @@
 # Element presence
 
-Problem: testing things that must _not_ appear on the page can lead to false-positive tests in no time. Let's learn about _inverse assertions_ that help you write such tests reliably.
+Let's prepare our `<DiscountCodeForm />` for this test case by doing the following:
 
-> Note: Vitest's `expect.element()` already has a built-in retry mechanism.
+```tsx filename=discount-code-form.test.browser.tsx nonumber highlight=5-6,9-12,15-16
+test('removes the applied discount code', async () => {
+	render(<DiscountCodeForm />)
 
-## Materials
+	// Enter a discount code.
+	const discountInput = page.getByLabelText('Discount code')
+	await discountInput.fill('EPIC2025')
 
-- [Inverse assertions](https://www.epicweb.dev/inverse-assertions)
+	// Apply the code.
+	const applyDiscountButton = page.getByRole('button', {
+		name: 'Apply discount',
+	})
+	await applyDiscountButton.click()
+
+	// Make sure that it's actually applied.
+	const discountText = page.getByText('Discount: EPIC2025 (-20%)')
+	await expect.element(discountText).toBeVisible()
+})
+```
+
+All that remains now is to remove this discount code the way a user would. For that, I will first locate the "Remove discount" button by its role `button` and its accessible text:
+
+```tsx filename=discount-code-form.test.browser.tsx nonumber
+const removeDiscountButton = page.getByRole('button', {
+	name: 'Remove discount',
+})
+await removeDiscountButton.click()
+```
+
+And now I will write a regular assertion with `expect.element()` using the `.not.toBeInTheDocument()` as the matcher:
+
+```tsx filename=discount-code-form.test.browser.tsx nonumber highlight=1
+await expect.element(discountText).not.toBeInTheDocument()
+```
+
+So why does this work?
+
+It's due to the retry mechanism built-in into `expect.element()`, which automatically makes Vitest `waitFor` the given assertion. Even if it takes time to remove the `discountText` element from the page, our test will wait until that happens and throw if it doesn't.
+
+> 🦉 You can configure the retry options on `expect.element()` by providing them as the second argument to that function:
+>
+> ```ts nonumber
+> await expect.element(locator, { interval, timeout })
+> ```
+>
+> Learn more in the 📜 [`expect.poll()` documentation](https://vitest.dev/api/expect.html#poll).

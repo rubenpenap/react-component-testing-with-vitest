@@ -1,0 +1,26 @@
+# Element presence
+
+So far you've been finding and interacting with the elements that are either already present on the page or expected to eventually appear. But what about the cases when you need to check the opposite? That a certain UI element _did not_ render?
+
+This is where you would normally reach out to an [inverse assertion](https://www.epicweb.dev/inverse-assertions) to get a predictable result and guard yourself from false-positive tests:
+
+```ts
+const notificationVisiblePromise = vi.waitFor(() => {
+	expect(notification).toBeVisible()
+})
+
+// Instead of asserting that the element is not visible,
+// which may lead to false-positive results if it appears after a delay,
+// check that the element has never appeared instead.
+await expect(notificationVisiblePromise).rejects.toThrow()
+```
+
+Or, alternatively, use the designated `waitForElementToBeRemoved()` utility from React Testing Library:
+
+```ts
+await waitForElementToBeRemoved(notification)
+```
+
+**However, there's a more convenient way to do this in Vitest!**
+
+👨‍💼 In this exercise, you will utilize the retry-ability of Vitest's `expect.element()` function to assert that the discount code has been removed from the UI once you click the respective button. Go to the <InlineFile file="./src/discount-code-form.browser.test.tsx">`discount-code-form.browser.test.tsx`</InlineFile> test suite and follow the instructions to complete a new test case.
