@@ -59,7 +59,13 @@
       "path": "exercises/03.best-practices/03.solution.network-mocking"
     },
     {
+      "path": "exercises/03.best-practices/04.problem.element-presence"
+    },
+    {
       "path": "exercises/03.best-practices/04.solution.element-presence"
+    },
+    {
+      "path": "exercises/03.best-practices/05.problem.page-navigation"
     },
     {
       "path": "exercises/03.best-practices/05.solution.page-navigation"
@@ -69,6 +75,9 @@
     },
     {
       "path": "exercises/04.debugging/01.solution.dom-snapshots"
+    },
+    {
+      "path": "exercises/04.debugging/02.problem.debugger"
     },
     {
       "path": "exercises/04.debugging/02.solution.debugger"

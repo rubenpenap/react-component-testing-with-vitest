@@ -1,12 +1,50 @@
 # Debugger
 
-1. Explain why a usual debugger won't cut it (two different threads: node and browser).
-1. Create a Visual Studio Code `launch` config.
-1. Showcase how to run Vitest from the launch task.
+Using debugger allows me to step through my test wherever and whenever I need to. It would be really helpful to pause after my test marks a cell in the `<TicTacToe />` component. I can do that by placing a `debugger` statement after the corresponding actions in the test:
 
-## Steps
+```tsx filename=debug.browser.test.tsx nonumber nocopy highlight=5,8,11
+test('places cross marks in a horizontal line', async () => {
+	render(<TicTacToe />)
 
-1. Create `.vscode/launch.json`.
-1. Modify `vite.config.ts` to set `headless` based on the `process.env.DEBUG` variable. We want to see the browser while debugging, but we don't need to while running the tests normally.
-1. Complete the instructions in the test suite (set a debugger).
-1. Run the tests via the "Debug Vitest Browser" command in the IDE.
+	await page.getByRole('button', { name: 'left middle' }).click()
+	debugger
+
+	await page.getByRole('button', { name: 'middle', exact: true }).click()
+	debugger
+
+	await page.getByRole('button', { name: 'right middle' }).click()
+	debugger
+
+	const squares = page.getByRole('button').elements().slice(3, 6)
+	expect(squares.map((element) => element.textContent)).toEqual(['✗', '✗', '✗'])
+})
+```
+
+Running this test via the "Debug Vitest Browser" will now stop the test execution at the `render(<TicTacToe />)` step automatically. I can jump to my own breakpoint by pressing <kbd>F5</kbd> or the `⏵` button in the debugging controls.
+
+![A screenshot showing both Chrome and Visual Studio Code open. The execution is paused at a debugger statement inserted after one of the test actions.](/assets/04-02-debugger-in-action.png)
+
+Every `debugger` statement _creates a breakpoint_. Once the JavaScript engine reaches that breakpoint, its execution will pause until it's resumed. I can inspect the DOM, styles, JavaScript execution, and the test state as if the time has froze now!
+
+## Adding breakpoints
+
+Placing a `debugger` statement anywhere in your code or test is not the only way to create a breakpoint. In fact, you might've noticed that putting the `debugger` in our test makes us _modify that test_!
+
+That isn't nice. Instead, you can add a breakpoint through your IDE.
+
+1. Locate the line of code you want to set a breakpoint at;
+1. Either click on the red circle on the gutter next to that line or right-click the gutter and select "Add a breakpoint":
+
+![A screenshot of Visual Studio code showing two red circles on the gutter next to the code, and an open context menu with the debugging options](/assets/04-02-add-breakpoint.png)
+
+> 🦉 Note that adding a breakpoint on a line will pause the execution **before** that line runs, not after. If you want to pause after a certian action, put a breakpoint after it in the code.
+
+## `--inspect-brk` vs `--inspect`
+
+One more noteworthy thing it the flags we are using to create a debugging process, specifically, the `--inspect-brk` flag.
+
+You may provide both `--inspect` and `--inspect-brk` flags to Vitest, but they behave differently. `--inspect-brk` will make Vitest _automatically add a breakpoint on every `render()`_, while `--inspect` will not.
+
+## What's next?
+
+With the debugging configured around out test suite, it's time to explore how you can get even more value out of your newly-found time stopping superpowers.

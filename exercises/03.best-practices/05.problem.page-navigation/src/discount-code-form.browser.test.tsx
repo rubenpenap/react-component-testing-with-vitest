@@ -1,18 +1,20 @@
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { http, HttpResponse } from 'msw'
-import { MemoryRouter } from 'react-router'
 import { test } from '../test-extend.js'
 import { DiscountCodeForm, type Discount } from './discount-code-form.js'
 
-const wrapper: React.JSXElementConstructor<{
-	children: React.ReactNode
-}> = ({ children }) => {
-	return <MemoryRouter>{children}</MemoryRouter>
-}
+// 🐨 Declare a new variable called `wrapper`.
+// Make it a React component that renders <MemoryRouter>
+// from the "react-router" package around any `children`
+// provided to the `wrapper` component.
+// 💰 const wrapper: React.JSXElementConstructor<{ children: React.ReactNode }> => () => {}
+// 💰 <MemoryRouter>{children}</MemoryRouter>
 
 test('applies a discount code', async () => {
-	render(<DiscountCodeForm />, { wrapper })
+	// 🐨 Provide the `wrapper` in the render options.
+	// 💰 render(<Component />, { wrapper })
+	render(<DiscountCodeForm />)
 
 	const discountInput = page.getByLabelText('Discount code')
 	await discountInput.fill('EPIC2025')
@@ -43,7 +45,8 @@ test('displays a warning for legacy discount codes', async ({ worker }) => {
 		),
 	)
 
-	render(<DiscountCodeForm />, { wrapper })
+	// 🐨 Provide the `wrapper` for this render.
+	render(<DiscountCodeForm />)
 
 	const discountInput = page.getByLabelText('Discount code')
 	await discountInput.fill('LEGA2000')
@@ -70,7 +73,8 @@ test('displays an error when fetching the discount fails', async ({
 		}),
 	)
 
-	render(<DiscountCodeForm />, { wrapper })
+	// 🐨 Provide the `wrapper` for this render.
+	render(<DiscountCodeForm />)
 
 	const discountInput = page.getByLabelText('Discount code')
 	await discountInput.fill('CODE1234')
@@ -86,7 +90,8 @@ test('displays an error when fetching the discount fails', async ({
 })
 
 test('removes the applied discount code', async () => {
-	render(<DiscountCodeForm />, { wrapper })
+	// 🐨 Provide the `wrapper` for this render.
+	render(<DiscountCodeForm />)
 
 	const discountInput = page.getByLabelText('Discount code')
 	await discountInput.fill('EPIC2025')
@@ -108,9 +113,14 @@ test('removes the applied discount code', async () => {
 })
 
 test('displays the "Back to cart" link', async () => {
-	render(<DiscountCodeForm />, { wrapper })
+	// 🐨 Provide the `wrapper` for this render.
+	render(<DiscountCodeForm />)
 
-	const backToCartLink = page.getByRole('link', { name: 'Back to cart' })
-	await expect.element(backToCartLink).toHaveAttribute('href', '/cart')
-	await expect.element(backToCartLink).toBeEnabled()
+	// 🐨 Locate the "Back to cart" link on the page.
+	// Assign its locator to a variable called `backToCartLink`.
+	// 💰 page.getByRole(role, { name })
+
+	// 🐨 Write an assertion that the `backToCartLink` has the
+	// correct value of the "href" attribute.
+	// 💰 .toHaveAttribute(attributeName, attributeValue)
 })

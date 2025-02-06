@@ -1,5 +1,12 @@
 # Page navigation
 
-Problem: the component you are testing does navigation to another page. Let's see what exactly you should test here on the integration level and how to do so.
+...
 
-- Showcases how to create a custom _wrapper_ for `<MemoryRouter />`.
+## Why not test the navigation?
+
+- Not reliable on the integration level anywhere. There may be other elements rendered in the router tree that can affect how the pages render or even whether some elements on the page are interactive (imagine a random component rendering an `opacity:0` overlay over the "Back to cart" button. It's broken now!).
+- Clear responsibilities. Clear boundaries. The Golden Rule of Assertion.
+
+## When to test the navigation
+
+- E2E tests as a part of some user flows. Navigation would act as the implied assertion there, which is fantastic.
