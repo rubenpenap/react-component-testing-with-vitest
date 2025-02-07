@@ -89,6 +89,9 @@
       "path": "exercises/04.debugging/03.solution.breakpoints"
     },
     {
+      "path": "exercises/04.debugging/04.problem.debug-console"
+    },
+    {
       "path": "exercises/04.debugging/04.solution.debug-console"
     }
   ]

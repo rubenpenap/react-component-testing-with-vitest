@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "exercises_04.debugging_04.solution.debug-console",
+  "name": "exercises_04.debugging_04.problem.debug-console",
   "scripts": {
     "dev": "vite",
     "test": "vitest"

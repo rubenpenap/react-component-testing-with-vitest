@@ -38,7 +38,7 @@ function MenuItemsList(props: { items: Array<MenuItem> }) {
 		<ul className="ml-4">
 			{props.items.map((item) => {
 				const isActive = matchPath(
-					{ path: item.url, end: true },
+					{ path: item.url, end: false },
 					location.pathname,
 				)
 

@@ -1,3 +1,27 @@
 # Debug console
 
-1. Showcase how to use the Debug Console in Visual Studio Code to evaluate expressions while at a breakpoint.
+First, I will try to run the `matchPath()` function with the same arguments as it's being run during the rendering by entering the whole expression in the Debug console:
+
+```
+matchPath({ path: '/dashboard', end: false }, location.pathname)
+```
+
+The console will print me the match object as the returned value of running this function:
+
+![A Visual Studio Code window with the Debug console open. An object is printed as the result of calling the match path function like it is used by the component.](/assets/04-04-debug-console-01.png)
+
+Now _this_ is a solid confirmation that the `/dashboard` path matches the current URL unexpectedly. Knowing this, I can try fixing the code right in the Debug console!
+
+My hunch is that the path matching is not strict, and I can confirm it by running the same `matchPath()` function again but now with the `end` option set to `true`:
+
+```
+matchPath({ path: '/dashboard', end: true }, location.pathname)
+```
+
+![A Visual Studio Code window with the Debug console open. Null is printed as the result of calling the match path function with the end option set to true.](/assets/04-04-debug-console-02.png)
+
+Woohoo! The `null` returned from `matchPath()` means that the `/dashboard` path no longer matches the current URL and the corresponding menu item will not be marked as active.
+
+Debug console is an _extremely_ powerful tool at your disposal. All the breakpoint techniques you've learned today can be applied to any JavaScript code, not just to test.
+
+<callout-info>When debugging Node.js, you can quickly start a debugging session in Visual Studio Code by expanding the context menu next to the "+" button that creates a new terminal and choosing a new "JavaScript Debug Terminal" instead.</callout-info>

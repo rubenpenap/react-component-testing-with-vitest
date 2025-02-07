@@ -1,0 +1,33 @@
+# Debug console
+
+Breakpoints allow you to stop your code's execution at any point in time. This is extremely handy to observe what's going on in your code or tests. But there's a way to get even more value out of them.
+
+Sometimes simply looking at the state of your code may not be enough to understand the unexpected behavior. This is where being able to _evaluate_ things at a certain breakpoint can be a huge timesaver.
+
+In this exercise, you will learn how to do just that, using the built-in "Debug console" in Visual Studio Code.
+
+## Debug console
+
+Debug console is a special kind of console that comes with modern IDEs. Its purpose is to give you an interface to access and run things during your debugging sessions.
+
+Debug console behaves similarly to the browser's Console, giving you a sandbox to run expressions and see their result in real time. It's time you got your hands on it!
+
+## Your task
+
+👨‍💼 In this exercise, you will expand on the last debugging session (the one about `<MenuMenu />`) and actually verify that the `matchPath()` logic was to blame for the bug.
+
+1. Start the tests in debug mode.
+1. Put the conditional breakpoint right where it was the last time—on the `return` line of rendering each menu item in the `<MenuItemList />` component.
+1. Once that's done and you have the test reach that breakpoint, open the "Debug console" (<kbd>Shift+Command+Y</kbd> in Visual Studio Code). _You can now interact with it!_.
+
+> Debug console will open automatically when you start a new debugging session.
+
+The console has access to all the variables at your breakpoint's scope. For example, try typing `item` and press Enter:
+
+![A Visual Studio Code window with the debug console open. The value of the item variable is printed in the debug console to inspect.](/assets/04-04-debug-console-example.png)
+
+That is the value of the `item` variable at this breakpoint!
+
+> 🦉 The objects you log out in Debug console are **interactve**. Try expanding some of the `item` properties to see that for yourself.
+
+With that in mind, run the `matchPath()` function in the Debug console with _exact values_, providing `/dashboard` as the path you want to check, leaving `location.pathname` reference as-is. Compare the printed result of matching the path with the `end: false` and `end: true` option set.
