@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "exercises_04.debugging_03.solution.breakpoints",
+  "name": "exercises_04.debugging_03.problem.breakpoints",
   "scripts": {
     "dev": "vite",
     "test": "vitest"

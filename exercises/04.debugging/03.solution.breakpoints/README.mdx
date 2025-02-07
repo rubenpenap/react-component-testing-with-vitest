@@ -1,3 +1,196 @@
 # Breakpoints
 
-1. Showcase how to step through a test using breakpoints.
+## Replacing `debugger` with breakpoints
+
+I will start the first task by removing all of the `debugger` statements from `tic-tac-toe.browser.test.tsx`:
+
+```tsx filename=tic-tac-toe.browser.test.tsx remove=9,12,15
+import { page } from '@vitest/browser/context'
+import { render } from 'vitest-browser-react'
+import { TicTacToe } from './tic-tac-toe.js'
+
+test('places cross marks in a horizontal line', async () => {
+	render(<TicTacToe />)
+
+	await page.getByRole('button', { name: 'left middle' }).click()
+	debugger
+
+	await page.getByRole('button', { name: 'middle', exact: true }).click()
+	debugger
+
+	await page.getByRole('button', { name: 'right middle' }).click()
+	debugger
+
+	const squares = page.getByRole('button').elements().slice(3, 6)
+	expect(squares.map((element) => element.textContent)).toEqual(['✗', '✗', '✗'])
+})
+```
+
+Because I still want to be able to debug those steps, I will add _breakpoints_ to replace those `debugger`s using my IDE:
+
+![A screenshot of Visual Studio code showing two red circles on the gutter next to the code, and an open context menu with the debugging options](/assets/04-03-add-breakpoint.png)
+
+> 🦉 You can use both your IDE and the "Source" panel in your browser to add breakpoints, even if your code is already running. That will keep your source code clean and give you more power and flexibility compared to `debugger`.
+
+## Conditional breakpoints
+
+Speaking of more powers, it's time to put them to the test! But not before I finish the new test case for the `<MainMenu />` component.
+
+As the name suggests, the menu component renders the main navigation menu for our application. To do that, it recursively iterates over the `menuItems` array to render those items and their possible children. This is, effectively, a loop with a base case and a recursive case:
+
+```tsx filename=main-menu.tsx nonumber nocopy highlight=7,9
+{
+	props.items.map((item) => (
+		<li key={item.url}>
+			<NavLink>{item.title}</NavLink>
+			{item.children ? (
+				// Recursive case
+				<MenuItemsList items={item.children} />
+			) : // Base case.
+			null}
+		</li>
+	))
+}
+```
+
+When rendering individual menu items, the component checks whether that item is active by matching its URL against the current location:
+
+```tsx filename=main-menu.tsx highlight=4,6
+import { useLocation, matchPath } from 'react-router'
+
+function MainMenuList() {
+	const location = useLocation()
+	// ...
+	const isActive = matchPath({ path: item.url, end: false }, location.pathname)
+}
+```
+
+This dependency on `react-router` means I need to create a custom `wrapper` in order for the menu component to render at all:
+
+```tsx filename=main-menu.browser.test.tsx nonumber
+render(<MainMenu />, {
+	wrapper({ children }) {
+		return <MemoryRouter>{children}</MemoryRouter>
+	},
+})
+```
+
+Since this test checks the currently active page, I need to somehow simulate the route that we are currently on in the application. I can do that by providing the path I want to the `initialEntries` prop of `<MemoryRouter />`:
+
+```tsx filename=main-menu.browser.test.tsx highlight=4 nonumber
+render(<MainMenu />, {
+	wrapper({ children }) {
+		return (
+			<MemoryRouter initialEntries={['/dashboard/analytics']}>
+				{children}
+			</MemoryRouter>
+		)
+	},
+})
+```
+
+Now, I need to check that the corresponding menu item is actually marked as the current page. Because the current page is indicated using the `aria-current` attribute set to `'page'`, I cannot directly locate that element. Instead, I will get all the rendered links and then find the one with that attribute set to the right value:
+
+```tsx filename=main-menu.browser.test.tsx highlight=1,3 nonumber
+const allLinks = page.getByRole('link').elements()
+const currentPageLink = allLinks.find(
+	(link) => link.getAttribute('aria-current') === 'page',
+)!
+```
+
+> 🦉 `page.getByRole('link')` returns a locator you can resolve in different ways. By default, it points to a single element matching the locator, but you can call its `.elements()` method to resolve it to a _list_ of matching HTML elements. This roughly translates to `.findAllByRole('link')` from RTL.
+
+And I'm going to conclude this test by adding the following assertion:
+
+```tsx filename=main-menu.browser.test.tsx nonumber
+await expect.element(currentPageLink).toHaveAccessibleName('Analytics')
+```
+
+This single assertion allows me to check multiple things at once:
+
+- The `currentPageLink` element could be located (i.e. is rendered by the menu);
+- The `currentPageLink` element has accessible name of `'Analytics'`, which in case of `role="link"` elements is derived from their text content. This way, I'm checking that the link is both visible to the screen-readers and has the correct text content.
+
+But running this test presents me with an error:
+
+```txt highlight=12-15 nonumber
+
+ ❯ src/main-menu.browser.test.tsx:22:39
+     20|  )!
+     21|
+     22|  await expect.element(currentPageLink).toHaveAccessibleName('Analytics')
+       |                                       ^
+     23| })
+     24|
+
+Caused by: Error: expect(element).toHaveAccessibleName()
+
+Expected element to have accessible name:
+  Analytics
+Received:
+  Dashboard
+```
+
+Looks like the current page link that gets rendered is the "Dashboard" link and not "Analytics". This demands some debugging.
+
+Now, there's multiple ways you can approach debugging this. You can go through the source code or maybe inspect the DOM via the `debug()` method from `render()` or print all the active link elements. Any technique is a good technique if it helps you get to the bottom of the issue faster.
+
+To give you more tools for debugging, I will approach this issue differently. If I take a look above the printed error in the terminal, I can spot this line:
+
+```
+Failure screenshot:
+  - src/__screenshots__/main-menu.browser.test.tsx/----1.png
+```
+
+Vitest takes screenshots of the page for every failed test case so you have some visual clue as to what is going on. Let's take a look at that screenshot:
+
+![A screenshot of the page with the main menu component rendered. It shows two menu links as active—dashboard and analytics.](/assets/04-03-test-screenshot.png)
+
+Hah! Both "Dashboard" and "Analytics" are treated as currently active navigation link.
+
+> 🦉 While it's not forbidden to have multiple `aria-current="page"` elements at the same time, it is generally advised by the [WAI-ARIA specification](https://w3c.github.io/aria/#aria-current) to "only mark **one** element as current".
+
+The fact that the "Analytics" menu item is marked as current is correct, that's what I expect. It's the "Dashboard" that's likely off here. It would be great to stop the time and look around when that menu item is getting rendered.
+
+That's a great use case for a breakpoint!
+
+But if I add a breakpoint in `<MenuItemsList />`, it will trigger on _every menu item_ that gets rendered. This will force me to step through irrelevant items before I get to the one I want, wasting my time.
+
+Instead, I will use a _conditional breakpoint_. It's like a regular breakpoint but it will only "activate" when a certain condition is met. What's great about this kind of breakpoints is that I can use expressions, accessing anything within the scope to write my condition.
+
+![A screenshot of Visual Studio Code. The context menu of the gutter is open and the "Add Conditional Breakpoint" menu item is selected](/assets/04-03-conditional-breakpoint-01.png)
+
+> I am putting the breakpoint on the line with `render` to trigger before the problematic item is rendered.
+
+As the condition, I will tell this breakpoint to become active only when the rendered item's `title` equals to `'Dashboard'`:
+
+![A screenshot of Visual Studio Code. The condition popup is open, and the expression is set to activate this breakpoint when the item's title equals to dashboard](/assets/04-03-conditional-breakpoint-02.png)
+
+If I run this test suite using the "Debug Vitest Browser" task we've prepared earlier, I will see the code execution stop right before the Dashboard menu item is about to get rendered:
+
+![A screenshot of Visual Studio Code. The debugger is running and the code execution is stopped at the return line with the conditional breakpoint. To the right, the debug panel is showing the item, isActive, and location variables observable in the current scope.](/assets/04-03-conditional-breakpoint-03.png)
+
+There are three key figures to observe in the "Variables" panel:
+
+1. The currently rendered `item` is, indeed, the Dashboard item (`item.title` and `item.url` confirm that);
+1. The `location` object from the parent closure has our current route set correctly by the test (`location.pathname` is `/dashboard/analytics`);
+1. However, the `isActive` object (the result of `matchPath()`) is _present_ for the Dashboard menu item where it shouldn't be.
+
+It looks like `/dashboard` pathname matches `/dashboard/analytics`! 🤦
+
+The culprit has been right there all along. The path matching was not strict:
+
+```tsx filename=main-menu.tsx remove=4-5 add=6-7
+const isActive = matchPath(
+	{
+		path: item.url,
+		// This makes path matching loose.
+		end: false,
+		// This makes path maching exact.
+		end: true,
+	},
+	location.pathname,
+)
+```
+
+Now you know how to harvest the power of conditional breakpoints to debug your React components or any JavaScript code in general. Use it wisely!

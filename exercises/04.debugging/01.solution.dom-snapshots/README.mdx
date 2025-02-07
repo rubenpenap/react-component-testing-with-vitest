@@ -2,7 +2,7 @@
 
 I've got two failing tests on my hands, and a good place to start is to isolate the one I'm going to address first:
 
-```tsx filename=debug.browser.test.tsx
+```tsx filename=tic-tac-toe.browser.test.tsx
 test.only('places cross marks in a horizontal line', async () => {
 ```
 
@@ -10,7 +10,7 @@ Now that the test results represent only this failing test, I can move on with t
 
 The goal of this test is to validate one of the scenarios of interacting with the `<TicTacToe />` component. If I place three marks in a horizontal line, they should form a winning line. This is precisely what the test actions do:
 
-```tsx filename=debug.browser.test.tsx
+```tsx filename=tic-tac-toe.browser.test.tsx
 await page.getByRole('button', { name: 'left middle' }).click()
 await page.getByRole('button', { name: 'middle', exact: true }).click()
 await page.getByRole('button', { name: 'right middle' }).click()
@@ -30,7 +30,7 @@ The rightmost mark is missing! But how? The test is clearly marking the left mid
 
 Luckily, I can observe the full state of the rendered DOM at any point in time using the `debug()` utility returned from `render()`:
 
-```tsx filename=debug.browser.test.tsx add=1,7
+```tsx filename=tic-tac-toe.browser.test.tsx add=1,7
 const { debug } = render(<TicTacToe />)
 
 await page.getByRole('button', { name: 'left middle' }).click()
