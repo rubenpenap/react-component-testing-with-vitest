@@ -1,16 +1,24 @@
 # Page navigation
 
-- **[ ] TODO: Make the discount code form access something from the router.**
+Components in your application don't exist in a vacuum. They are likely a part of a larger component tree that describes a page that lives at a certain _route_. Whether you are building a Single Page Application, or a Multi-Page Application, or even a Statically Generated Site, you are unlikely to escape routing.
 
-Components in your application don't exist in isolation. They are likely a part of a larger page that lives at a certain _route_. Whether you are building a Single Page Application, or a Multi-Page Application, or even a Statically Generated Site, you are unlikely to escape routing.
+What interests us from the testing perspective here is that components can _access router data_ and _navigate to other routes_. We have to account for both of those for reliable and resilient tests.
 
-What interest us from the testing perspective here is that components can _access router data_ and _navigate to other routes_. Both of those have to be accounted for during automated tests.
+While you were gone, I've added some routing to our application with React Router. The `<DiscountCodeForm />` now belongs to a certain route and contains a link to the cart page.
 
-While you were gone, I've added some routing to our application with React Router. The `<DiscountCodeForm />` now belongs to a certain route and contains a link to the Cart page. As usual, the best way for you to learn how to test this is through writing some tests!
+If you try running the tests now via `npm test`, you will be faced with the following error:
 
-👨‍💼 Head to the <InlineFile file="./src/discount-code-form.browser.test.tsx">`discount-code-form.browser.test.tsx`</InlineFile> where you will have two tasks:
+```
+Cannot destructure property 'basename' of 'React10.useContext(...)' as it is null.
+  ❯ LinkWithRef /node_modules/.vite/deps/react-router.js:8171:11
+```
 
-1. Refactor the existing tests by introducing a custom `wrapper` that makes it possible for our router-dependent component to render in isolation;
-1. Finish the newly added test case for the "Back to cart" link.
+This is a bit cryptic, but the stack trace here strongly suggests that the `<Link />` component is trying to read some context that is not available. In actuality, links cannot be rendered outside of the `<Router />` component, and we don't have that in our tests.
+
+We've covered it in the previous exercises that component-level testing doesn't involve rendering the entire component tree so the `<Router>` part introduced in `<App />` is missing.
+
+👨‍💼 In this exercise, you will solve this problem and restore order to the automated tests by creating a _custom wrapper_ for rendering our `<DiscountCodeForm />` component in tests. Follow the instructions in <InlineFile file="./src/discount-code-form.browser.test.tsx">`discount-code-form.browser.test.tsx`</InlineFile> to adjust the test setup and see the tests passing again.
+
+👨‍💼 Once that's done, complete the newly added test case for the "Back to cart" link.
 
 See you once you're done!

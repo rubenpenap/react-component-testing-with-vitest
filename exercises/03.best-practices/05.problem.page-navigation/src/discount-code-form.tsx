@@ -1,10 +1,6 @@
-import { useReducer, useState, type FormEventHandler } from 'react'
-import { ... } from 'react-router'
-
-interface Notification {
-	type: 'error' | 'warning'
-	text: string
-}
+import { useReducer, type FormEventHandler } from 'react'
+import { Link } from 'react-router'
+import { toast } from 'sonner'
 
 export interface Discount {
 	code: string
@@ -70,32 +66,24 @@ export function DiscountCodeForm() {
 	const [state, dispatch] = useReducer(discountFormReducer, {
 		submitting: false,
 	})
-	const [notification, setNotification] = useState<Notification>()
-
-	const notify = (text: string, type: Notification['type'] = 'warning') => {
-		setNotification({ type, text })
-		setTimeout(() => setNotification(undefined), 5000)
-	}
 
 	const handleApplyDiscount: FormEventHandler<HTMLFormElement> = async (
 		event,
 	) => {
 		event.preventDefault()
-		setNotification(undefined)
 		dispatch({ type: 'submitting' })
 
 		const data = new FormData(event.currentTarget)
 		const code = data.get('discountCode')
 
 		if (!code) {
-			notify('Missing discount code', 'error')
+			toast.error('Missing discount code')
 			return
 		}
 
 		if (typeof code !== 'string') {
-			notify(
+			toast.error(
 				`Expected discount code to be a string but got ${typeof code}`,
-				'error',
 			)
 			return
 		}
@@ -105,11 +93,11 @@ export function DiscountCodeForm() {
 				dispatch({ type: 'success', discount })
 
 				if (discount.isLegacy) {
-					notify(`"${code}" is a legacy code. Discount amount halfed.`)
+					toast.warning(`"${code}" is a legacy code. Discount amount halfed.`)
 				}
 			})
 			.catch(() => {
-				notify('Failed to apply the discount code', 'error')
+				toast.error('Failed to apply the discount code')
 				dispatch({ type: 'idle' })
 			})
 	}
@@ -125,7 +113,7 @@ export function DiscountCodeForm() {
 		await removeDiscount(code)
 			.catch((error) => {
 				console.error(error)
-				notify('Failed to remove the discount code', 'error')
+				toast.error('Failed to remote the discount code')
 			})
 			.finally(() => {
 				dispatch({ type: 'idle' })
@@ -184,17 +172,17 @@ export function DiscountCodeForm() {
 					>
 						Apply discount
 					</button>
+
+					<p className="text-center">
+						<Link
+							to="/cart"
+							className="text-sm font-medium text-slate-500 hover:underline"
+						>
+							Back to cart
+						</Link>
+					</p>
 				</form>
 			)}
-
-			{notification ? (
-				<p
-					role="alert"
-					className={`animation-slide animate-slide-in fixed bottom-5 right-5 rounded-lg border px-5 py-2.5 font-medium ${notification.type === 'error' ? 'border-red-800/20 bg-red-200' : 'border-yellow-800/20 bg-yellow-200'}`}
-				>
-					{notification.text}
-				</p>
-			) : null}
 		</section>
 	)
 }

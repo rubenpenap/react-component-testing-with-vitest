@@ -81,7 +81,6 @@ export function DiscountCodeForm() {
 		event,
 	) => {
 		event.preventDefault()
-		setNotification(undefined)
 		dispatch({ type: 'submitting' })
 
 		const data = new FormData(event.currentTarget)
@@ -110,6 +109,7 @@ export function DiscountCodeForm() {
 			})
 			.catch(() => {
 				notify('Failed to apply the discount code', 'error')
+				dispatch({ type: 'idle' })
 			})
 	}
 
@@ -122,12 +122,12 @@ export function DiscountCodeForm() {
 		const code = data.get('discountCode') as string
 
 		await removeDiscount(code)
-			.then(() => {
-				dispatch({ type: 'idle' })
-			})
 			.catch((error) => {
 				console.error(error)
 				notify('Failed to remove the discount code', 'error')
+			})
+			.finally(() => {
+				dispatch({ type: 'idle' })
 			})
 	}
 

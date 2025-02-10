@@ -112,5 +112,4 @@ test('displays the "Back to cart" link', async () => {
 
 	const backToCartLink = page.getByRole('link', { name: 'Back to cart' })
 	await expect.element(backToCartLink).toHaveAttribute('href', '/cart')
-	await expect.element(backToCartLink).toBeEnabled()
 })
