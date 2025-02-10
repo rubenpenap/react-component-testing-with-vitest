@@ -23,14 +23,14 @@ Here, two things have my interest:
 
 I reflect those two expectations like so:
 
-```tsx
+```tsx nonumber nocopy
 expect(screen.getByText('file.txt')).toBeTruthy()
 expect(screen.getByText('hello world')).toBeTruthy()
 ```
 
 Looks like the first test is done. All that's left is to run via `npm test` and... Oh, no.
 
-```sh
+```sh nonumber nocopy
  FAIL  src/file-preview.test.tsx > displays the preview card
 TypeError: file.text is not a function
  ❯ src/file-preview.tsx:7:8
@@ -47,7 +47,7 @@ Except it's not. The `<FilePreview />` component calls the [`Blob.prototype.text
 
 Turns out, the `Blob.prototype.text` method isn't implemented in JSDOM. You can reproduce this in isolation as well by running this code:
 
-```ts
+```ts nonumber
 import { JSDOM } from 'jsdom'
 
 const dom = new JSDOM()

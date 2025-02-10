@@ -29,18 +29,27 @@
 
 ## Prerequisites
 
-- TODO: add prerequisites
-- Some
-- Pre-requisite
-- links
-- here
+You don't have to have any prior experience with Vitest or Vitest Broweser Mode
+to complete this workshop.
+
+- **A basic experience with TypeScript is required.**
+- **A basic experience with component-level testing is beneficial.** This
+  workshop works best if you've written component tests in the past. But don't
+  worry if you haven't, you will write a bunch of those during the workshop!
+- Get familiar with
+  [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/),
+  especially its
+  [Guiding Principles](https://testing-library.com/docs/guiding-principles). You
+  don't need to have any prior experience of using the library.
 
 ## Pre-workshop Resources
 
 Here are some resources you can read before taking the workshop to get you up to
 speed on some of the tools and concepts we'll be covering:
 
-- TODO: add resources
+- [**Why I Won't Use JSDOM**](https://www.epicweb.dev/why-i-won-t-use-jsdom)
+- [The Golden Rule of Assertion](https://www.epicweb.dev/the-golden-rule-of-assertions)
+- [True Purpose of Testing](https://www.epicweb.dev/the-true-purpose-of-testing)
 
 ## System Requirements
 
