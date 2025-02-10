@@ -14,26 +14,3 @@ test('places cross marks in a horizontal line', async () => {
 	const squares = page.getByRole('button').elements().slice(3, 6)
 	expect(squares.map((element) => element.textContent)).toEqual(['✗', '✗', '✗'])
 })
-
-test('...', async () => {
-	/**
-	 * @fixme @todo
-	 */
-	// A bunch of video thumbnails that render a lot of UI
-	// but you are interested only in certain elements, like "Watch now" links.
-	//
-	// OR any kind of list with interactive elements like buttons next to each element.
-	const { debug } = render(
-		<VideoFeed>
-			<Video />
-			<Video />
-			<Video />
-			<Video />
-			<Video />
-		</VideoFeed>,
-	)
-
-	// A large component tree and we can print all elements
-	// matching this role.
-	// debug(page.getByRole('button').all())
-})

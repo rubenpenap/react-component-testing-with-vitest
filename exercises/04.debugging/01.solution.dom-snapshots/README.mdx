@@ -113,27 +113,23 @@ Alright! The first test is back to green. But what about the second one?
 
 Sometimes the rendered element tree is too large to digest all at once. This is where isolating it to a particular element or a set of elements is a huge time-saver to get to the bottom of the issue.
 
-As it turns out, this is exactly the case for the second failing test.
+You can print a single or multiple elements by providing their locators to the `debug()` function:
 
-> TODO: Complete the solution once the second failing test is there.
-
----
-
-This is where taking _spapshots_ comes in handy. At any point of your test, you can take a look at the current state of the DOM to see if it's what you expect it to be. You can do that by calling the `debug()` utility function returned from `render()`:
-
-```tsx
-const { debug } = render(<p>Hello world</p>)
-debug()
+```tsx nonumber
+debug(page.getByRole('button', { name /middle/ }))
 ```
 
-```html
-<body>
-	<p>Hello world</p>
-</body>
+For example, the code above will print all the buttons that have `middle` in their accessible name. Note that the elements you provide to `debug()` don't have to be related in any way. This means you can cherry-pick only those sections of the markup that interest you:
+
+```tsx nonumber
+debug(
+	// Print a certain link.
+	page.getByRole('link', { name: 'Go back' }),
+
+	// Print all buttons on the page.
+	page.getByRole('button').elements(),
+
+	// Print a direct HTMLElement reference.
+	document.querySelector('nav ul > li:nth-child(2)'),
+)
 ```
-
----
-
-- How to use `debug()` from `render()`.
-- You can debug the entire rendered tree by calling `debug()`.
-- You can debug a subportion of the tree but calling `debug(locator)` or even an array of locators.
