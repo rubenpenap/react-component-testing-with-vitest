@@ -1,1 +1,25 @@
 # Sunsetting JSDOM
+
+You came to this workshop to learn a new way of testing your UI components, but before we get anywhere near to that, I want you to understand _why_ this change is needed. The last thing I want you to do is refactor your tests just because I told you to. I want _you_ to understand the flawed reality of browser-like environments by experiencing how they let you down firsthand. By the end of this tiny exercise you won't have any wish to use those environments anymore.
+
+But what are browser-like environments, to start with?
+
+## Browser-like environments
+
+The need to test UI components has been around as long as developers were creating them. First browser automation tools date more than a decade ago and while they were used for end-to-end testing, bringing component-level tests to them has proved inefficient. Such tests were hard to write and maintain, and so developers naturally had to solve this problem.
+
+One of those solutions was JSDOM. It's a library that allows you to manipulate the DOM like you would in a real browser but doesn't require you to actually run one. It achieves that through implementing a bunch of WHATWG HTML APIs and exposing you a familiar interface to work with them.
+
+Due to its simplicity and significantly reduced cost of tests, JSDOM has gain wide adoption for testing UI components in isolation. To this day developers use JSDOM wrapped in test environments like `jest-environment-jsdom` to run their integration tests.
+
+## The problem
+
+If I was to highlight the main problem of browser-like environments it would that they are, by design, one big polyfill. The quality and reliability of your tests then becomes as good as the quality of that polyfill. Sadly, it is often lacking in unapparent ways.
+
+About 15 years ago JSDOM set off to solve the lack of proper tooling for integration tests, but the tools have improved and evolved significantly since then. From Cypress to Playwright and now to component-level tests in Vitest, the browser automation has never been more accessible, performant, and efficient to use. And it's only going to get better from here.
+
+> 📜 If you want to learn more about the dangers of browser-like environments, read [Why I Won't Use JSDOM](https://www.epicweb.dev/why-i-won-t-use-jsdom).
+
+But it's not about being redudant. Browser-like environment pose a serious threat to the quality of your tests, have compatibility issues, and can break valid JavaScript code. This often leads to you wasting your time debugging your test environment instead of developing and testing your apps.
+
+I don't want you to waste your time on that. I want you to write solid tests and you can trust, and good tooling is an essential element of that experience.
