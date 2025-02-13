@@ -1,6 +1,6 @@
 # Network mocking
 
-We've got quite far testing the `<DiscountForm />` component but there's just one problem. The component has been a bit naive. It simply took the entered discount code and put it in internal state. That's not how things work in real life. In practice, it would likely send that code to some server to validate and apply. It would make a _network call_.
+We've got quite far testing the `<DiscountCodeForm />` component but there's just one problem. The component has been a bit naive. It simply took the entered discount code and put it in internal state. That's not how things work in real life. In practice, it would likely send that code to some server to validate and apply. It would make a _network call_.
 
 In fact, I went and refactored the discount code component to do just that! Now, submitting the form dispatches a `POST https://api.example.com/discount/code` request with the provided code. Only once the server sends back the confirmation will the component display the applied discount in the UI.
 
