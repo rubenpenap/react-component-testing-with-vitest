@@ -29,7 +29,7 @@ The installation step is done, and now it's time to configure Vitest is it can r
 
 To enable the Browser Mode in Vitest, I need to set `test.browser.enabled` to `true` in my `vite.config.ts`/`vitest.config.ts`:
 
-```ts filename=vite.config.ts add=9-11
+```ts filename=vite.config.ts remove=9 add=10-12
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -38,6 +38,7 @@ export default defineConfig({
 	plugins: [react()],
 	test: {
 		globals: true,
+		environment: 'jsdom',
 		browser: {
 			enabled: true,
 		},

@@ -1,6 +1,14 @@
 # Installation and setup
 
-That's it! :tada: You have everything you need to finally start testing my browser code in the browser. Now, it's time to refactor the existing test to leverage the beauty of Vitest Browser Mode.
+That's it! :tada: You have everything you need to finally start testing your browser code in the browser.
+
+If you try running tests right now, you will get an error:
+
+```txt nonumber nocopy
+TestingLibraryElementError: Unable to find an element with the text: hello world. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+```
+
+This is because you have to refactor your test suite to correctly render your component in the browser. This is exactly what you are going to do in the next exercise.
 
 ## Related materials
 

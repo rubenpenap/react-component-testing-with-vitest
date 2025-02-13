@@ -16,9 +16,21 @@ I think this is a great problem for you to fix!
 
 👨‍💼 In this exercise, you will create a custom browser setup file that will run as a global setup for all component tests.
 
-First, create a <InlineFile file="vitest.browser.setup.ts">`vitest.browser.setup.ts`</InlineFile> file. In that file, import any assets you wish to apply to _all tests_ (e.g. CSS).
+🐨 First, create a <InlineFile file="vitest.browser.setup.ts">`vitest.browser.setup.ts`</InlineFile> file. In that file, import any assets you wish to apply to _all tests_ (e.g. `./src/index.css`).
 
-> 🦉 To make Vite process the browser setup file like it does the rest of the app, include the following type reference at the top of the setup file: `/// <reference path="./src/vite-env.d.ts" />`.
+🐨 Enable TypeScript for the new file by adding it to the `include` array in <InlineFile file="tsconfig.node.json">`tsconfig.node.json`</InlineFile>.
+
+Once you do all this, you will spot that the `*.css` imports fail to resolve in TypeScript.
+
+```txt nonumber nocopy
+Cannot find module './src/index.css' or its corresponding type declarations.ts(2307)
+```
+
+🐨 To fix this, we need to pull some of the Vite built-in type definitions to help us. At the top of the `vitest.browser.setup.ts` file, add the following type reference comment:
+
+```ts nonumber
+/// <reference path="./src/vite-env.d.ts" />
+```
 
 Lastly, provide the path to the setup file in <InlineFile file="vite.config.ts">`vite.config.ts`</InlineFile> as the `setupFiles` value of a conrete browser instance (follow the instructions in the configuration file for more details).
 

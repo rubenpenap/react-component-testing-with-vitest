@@ -8,6 +8,8 @@ export default defineConfig({
 		globals: true,
 		browser: {
 			enabled: true,
+			// 🐨 Set a custom browser provider via the `provider` option.
+			// 💰 provider: 'playwright',
 			instances: [
 				{
 					browser: 'chromium',

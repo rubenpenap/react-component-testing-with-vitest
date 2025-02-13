@@ -1,6 +1,6 @@
 // 💣 Remove the import from `@testing-library/react`. You won't need it anymore.
 import { render, screen } from '@testing-library/react'
-// 🐨 Import `page` from '@vitest/browser'
+// 🐨 Import `page` from '@vitest/browser/context'
 // 💰 import { foo } from 'bar'
 //
 // 🐨 Import `render` from 'vitest-browser-react'.
@@ -10,7 +10,7 @@ import { FilePreview } from './file-preview.tsx'
 test('displays the preview card', async () => {
 	render(<FilePreview file={new File(['hello world'], 'file.txt')} />)
 
-	// 🐨 Replace `expect()` with `expect.element()`.
+	// 🐨 Replace `expect()` with `await expect.element()`.
 	expect(
 		// 🐨 Replace the `screen.getByText` function with
 		// `page.getByText`.
