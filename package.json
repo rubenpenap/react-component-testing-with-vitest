@@ -31,8 +31,7 @@
   "author": "Artem Zakharchenko <kettanaito@gmail.com> (https://kettanaito.com/)",
   "license": "GPL-3.0-only",
   "workspaces": [
-    "exercises/*/*",
-    "examples/*"
+    "exercises/*/*"
   ],
   "engines": {
     "node": "^18.19.0 || >=20.5.0",
