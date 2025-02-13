@@ -8,7 +8,14 @@ You can fix this by introducing _different workspaces_ for differnt types of tes
 
 🐨 First, update <InlineFile file="vite.config.ts">`vite.config.ts`</InlineFile> to list multiple [workspaces](https://main.vitest.dev/guide/workspace.html#configuration). Define one for unit tests and the other for component tests.
 
-🐨 Next, rename <InlineFile file="tsconfig.test.json">`tsconfig.test.json`</InlineFile> to `tsconfig.test.browser.json`. This TypeScript configuration will apply only to the component tests now.
+🐨 Next, rename <InlineFile file="tsconfig.test.json">`tsconfig.test.json`</InlineFile> to `tsconfig.test.browser.json`. This TypeScript configuration will apply only to the component tests now. Update its `include` to target `**/*.browser.test.ts*` files:
+
+```json filename=tsconfig.test.browser.json remove=2 add=3
+{
+	"include": ["**/*.test.ts"],
+	"include": ["**/*.browser.test.ts*"]
+}
+```
 
 🐨 To have proper type-checking in unit tests, create a new <InlineFile file="tsconfig.test.unit.json">`tsconfig.test.unit.json`</InlineFile> file and list there the properties necessary for the unit tests. You can use this as an example:
 
@@ -26,6 +33,21 @@ You can fix this by introducing _different workspaces_ for differnt types of tes
 ```
 
 🐨 You might've noticed that this config relies on `@types/node` to expose Node.js type in unit tests, but that dependency is missing! Install `@types/node` as a dev dependency to fix that.
+
+🐨 For TypeScript to pick up all of these configs, update <InlineFile file="tsconfig.json">`tsconfig.json`</InlineFile> to include the newly added configurations in `references`:
+
+```json filename=tsconfig.json remove=6 add=7-8
+{
+	"files": [],
+	"references": [
+		{ "path": "./tsconfig.app.json" },
+		{ "path": "./tsconfig.node.json" },
+		{ "path": "./tsconfig.test.json" },
+		{ "path": "./tsconfig.test.unit.json" },
+		{ "path": "./tsconfig.test.browser.json" }
+	]
+}
+```
 
 🐨 Finally, rename the existing `file-preview.test.tsx` component test to `file-preview.browser.test.tsx` to be picked up by the proper workspace in Vitest.
 
