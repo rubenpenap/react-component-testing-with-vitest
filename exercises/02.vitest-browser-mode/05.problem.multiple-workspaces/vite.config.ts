@@ -28,6 +28,10 @@ export default defineConfig({
 	//   include: ["**/*.browser.test.ts(x)?"]
 	// }
 	//
+	// 🐨 At the root-level of the browser workspace object
+	// set the `extends` property to true. This will use the
+	// root-level plugins, like `react()`, for browser tests.
+	//
 	// 🐨 Finally, copy the existing `browser` configuration
 	// under the `test` property of the second workspace.
 	// 💰 { test: { name: 'browser', browser: {...} }}

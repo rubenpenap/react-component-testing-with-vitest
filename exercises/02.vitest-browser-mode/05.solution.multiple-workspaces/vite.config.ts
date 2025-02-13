@@ -16,6 +16,7 @@ export default defineConfig({
 				},
 			},
 			{
+				extends: true,
 				test: {
 					name: 'browser',
 					globals: true,
