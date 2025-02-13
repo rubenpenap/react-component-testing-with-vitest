@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "exercises_02.vitest-browser-mode_01.solution.installation-and-setup",
   "scripts": {
     "dev": "vite",

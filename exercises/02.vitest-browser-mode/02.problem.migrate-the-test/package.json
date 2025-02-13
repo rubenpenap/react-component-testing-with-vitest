@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "exercises_02.vitest-browser-mode_02.problem.migrate-the-test",
   "scripts": {
     "dev": "vite",
