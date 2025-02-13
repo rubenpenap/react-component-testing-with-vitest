@@ -12,7 +12,7 @@ Workspaces are listed in the `test.workspace` property in your Vitest config, an
 
 I will define two workspaces:
 
-```ts filename=vite.config.ts add=10-16,19-33
+```ts filename=vite.config.ts add=10-16,19-34
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -31,6 +31,7 @@ export default defineConfig({
 				},
 			},
 			{
+				extends: true,
 				test: {
 					name: 'browser',
 					globals: true,
