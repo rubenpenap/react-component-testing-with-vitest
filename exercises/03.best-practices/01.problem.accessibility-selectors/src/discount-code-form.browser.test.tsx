@@ -10,11 +10,11 @@ test('renders the discount form', async () => {
 	// 💰 const discountInput = page.getByLabelText(labelText)
 	//
 	// 🐨 Write an assertion that the `discountInput` element is visible.
-	// 💰 expect.element(locator).toBeVisible()
+	// 💰 await expect.element(locator).toBeVisible()
 	//
 	// 🐨 Create a new variable called `applyDiscountButton` and assign it
 	// the result of locating the element by role 'button' and accessible name
-	// 'Apply discount'.
+	// "Apply discount".
 	// 💰 const applyDiscountButton = page.getByRole(role, { name: accessibleName })
 	//
 	// 🐨 Finally, write another assertion that the apply discount button is visible.

@@ -38,7 +38,13 @@ npm install -D msw
 npx msw init ./public
 ```
 
-🐨 Create a browser integration file at <InlineFile file="./src/mocks/browser.ts">`src/mocks/browser.ts`</InlineFile>. Feel free to paste the following content there:
+🐨 Create a new folder in `src` called `mocks`. In `src/mocks`, create a new file called `handlers.ts`. For now, let it export a single empty array called `handlers`:
+
+```ts filename=src/mocks/handlers.ts
+export const handlers = []
+```
+
+🐨 Next, create a browser integration file at <InlineFile file="./src/mocks/browser.ts">`src/mocks/browser.ts`</InlineFile>. Feel free to paste the following content there:
 
 ```ts filename=src/mocks/browser.ts
 import { setupWorker } from 'msw/browser'
@@ -74,6 +80,25 @@ For that, you will use a _custom test context_.
 ### Vitest Browser Mode integration
 
 🐨 Create a new file called <InlineFile file="./test-extend.ts">`test-extend.ts`</InlineFile>.
+
+Since it's a new TypeScript module, you need to tell TypeScript how to handle it. Right now, no configurations include this module so writing any code there will error.
+
+🐨 In <InlineFile file="tsconfig.test.browser.json">`tsconfig.test.browser.json`</InlineFile>, add `"test-extend.ts"` to the `include` array:
+
+```json filename=tsconfig.test.browser.json remove=3 add=4
+{
+	"extends": "./tsconfig.base.json",
+	"include": ["**/*.browser.test.ts*"],
+	"include": ["**/*.browser.test.ts*", "test-extend.ts"],
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "preserve",
+		"types": ["vitest/globals", "@vitest/browser/providers/playwright"]
+	}
+}
+```
+
+> We are adding it to the configuration for browser tests because the code in `test-extend.ts` will run in the browser.
 
 🐨 In `test-extend.ts`, import `test as testBase` from `vitest`:
 
@@ -161,7 +186,7 @@ With the setup finally done, let's move on to describing the network.
 
 ### Describing the network
 
-🐨 Next, create a new file called <InlineFile file="./src/mocks/handlers.ts">`src/mocks/handlers.ts`</InlineFile>. You will describe the network behaviors you want here. In that file, import `http` and `HttpResponse` from `msw`:
+🐨 Head back to `src/mocks/handlers.ts`. In this file, you will describe the network behaviors you want here. Import `http` and `HttpResponse` from `msw`:
 
 ```ts filename=src/mocks/handlers.ts add=1
 import { http, HttpResponse } from 'msw'
