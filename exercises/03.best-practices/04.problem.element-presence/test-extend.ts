@@ -1,7 +1,7 @@
 import { test as testBase } from 'vitest'
 import { startWorker, worker } from './src/mocks/browser.js'
 
-interface TestContext {
+type TestContext = {
 	worker: typeof worker
 }
 

@@ -148,7 +148,17 @@ export const test = testBase.extend({
 
 In this fixture, you are telling Vitest to start the worker (`await startWorker()` from `src/mocks/browser.js` you've prepared earlier), then expose it to the test (`await use(worker)`), and finally call `worker.stop()` after the test is done.
 
-There's just a slight issue with this. By default, fixtures in Vitest are _lazy_, which means they will not be initialized unless they are referenced in a test. Here's what that means:
+🐨 To help Vitest understand the types of this `worker` fixture, annotate it explicitly by creating a new type called `TestContext`, describing the worker there, and providing it as a type argument to `test.extend()`:
+
+```ts filename=test-extend.ts add=1-3 highlight=5
+type TestContext = {
+	worker: typeof worker
+}
+
+export const test = testBase.extend<TestContext>({
+```
+
+There's just a slight issue with all of this. By default, fixtures in Vitest are _lazy_, which means they will not be initialized unless they are referenced in a test. Here's what that means:
 
 ```ts filename=some.test.ts highlight=3,7
 // MSW will not start here because this test does not
