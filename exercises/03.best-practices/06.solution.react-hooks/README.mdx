@@ -1,0 +1,16 @@
+# React hooks
+
+```ts
+import { renderHook } from 'vitest-browser-react'
+import { act } from 'react'
+
+test('should increment counter', async () => {
+	const { result } = renderHook(() => useCounter())
+
+	act(() => {
+		result.current.increment()
+	})
+
+	expect(result.current.count).toBe(1)
+})
+```

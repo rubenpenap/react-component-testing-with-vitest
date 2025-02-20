@@ -71,6 +71,9 @@
       "path": "exercises/03.best-practices/05.solution.page-navigation"
     },
     {
+      "path": "exercises/03.best-practices/06.solution.react-hooks"
+    },
+    {
       "path": "exercises/04.debugging/01.problem.dom-snapshots"
     },
     {
