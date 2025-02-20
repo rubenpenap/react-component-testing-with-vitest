@@ -2,6 +2,9 @@ import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { DiscountCodeForm } from './discount-code-form.js'
 
+// 🐨 Rename this test name to reflect the changes
+// you are about to make.
+// 💰 "applies a discount code"
 test('renders the discount form', async () => {
 	render(<DiscountCodeForm />)
 
