@@ -9,6 +9,7 @@ workspace/
 data.db
 /playground
 **/tsconfig.tsbuildinfo
+**/*.tsbuildinfo
 __screenshots__
 
 # in a real app you'd want to not commit the .env
