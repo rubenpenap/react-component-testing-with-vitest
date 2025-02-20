@@ -33,7 +33,7 @@ test('displays a warning for legacy discount codes', async ({ worker }) => {
 	worker.use(
 		http.post<never, string, Discount>(
 			'https://api.example.com/discount/code',
-			async function override({ request }) {
+			async ({ request }) => {
 				const code = await request.text()
 
 				return HttpResponse.json({
