@@ -17,6 +17,20 @@ To make Vite process this file the same way it does the rest of my application, 
 import './src/index.css'
 ```
 
+Since we added this new file, we have to tell TypeScript how it should be handled. In `tsconfig.test.json`, add `vitest.browser.setup.ts` to the `compilerOptions.include` array:
+
+```json filename=tsconfig.test.json add=6
+{
+	"compilerOptions": {
+		"include": [
+			"**/*.test.ts*",
+			// The setup file runs in the browser just like the test suite.
+			"vitest.browser.setup.ts"
+		]
+	}
+}
+```
+
 Now all that remains is to tell Vitest to use this file as the global setup for the Browser Mode.
 
 In `vite.config.ts`, I will provide the path to this setup file as the value for the `setupFiles` property on the current browser instance:

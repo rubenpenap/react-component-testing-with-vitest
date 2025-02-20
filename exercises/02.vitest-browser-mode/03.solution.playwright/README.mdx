@@ -43,7 +43,7 @@ And, finally, let's update the type definitions for the assertion matchers to be
 ```json filename=tsconfig.test.json remove=9 add=10
 {
 	"extends": "./tsconfig.base.json",
-	"include": ["vite.config.ts", "**/*.test.ts*"],
+	"include": ["**/*.test.ts*"],
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "preserve",

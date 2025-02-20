@@ -77,7 +77,7 @@ The last thing that remains is to extend the TypeScript configuration to recogni
 ```json filename=tsconfig.test.json add=10
 {
 	"extends": "./tsconfig.base.json",
-	"include": ["vite.config.ts", "**/*.test.ts*"],
+	"include": ["**/*.test.ts*"],
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "preserve",
