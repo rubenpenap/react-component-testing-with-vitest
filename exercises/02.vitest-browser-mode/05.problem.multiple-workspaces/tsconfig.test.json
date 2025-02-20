@@ -1,6 +1,6 @@
 {
 	"extends": "./tsconfig.base.json",
-	"include": ["**/*.test.ts*"],
+	"include": ["vitest.browser.setup.ts", "**/*.test.ts*"],
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "preserve",
