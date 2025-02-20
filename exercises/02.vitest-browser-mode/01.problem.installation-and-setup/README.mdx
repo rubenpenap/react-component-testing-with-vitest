@@ -29,13 +29,14 @@ The installation step is done, and now it's time to configure Vitest is it can r
 
 To enable the Browser Mode in Vitest, I need to set `test.browser.enabled` to `true` in my `vite.config.ts`/`vitest.config.ts`:
 
-```ts filename=vite.config.ts remove=9 add=10-12
+```ts filename=vite.config.ts remove=10 add=11-13
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-	plugins: [react()],
+	plugins: [react(), tailwindcss()],
 	test: {
 		globals: true,
 		environment: 'jsdom',
@@ -48,13 +49,14 @@ export default defineConfig({
 
 As the next step, I need to tell Vitest what browsers I want for testing my components. Let's use Chromium by setting the `test.browser.instances` correctly:
 
-```ts filename=vite.config.ts add=10-14
+```ts filename=vite.config.ts add=11-15
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-	plugins: [react()],
+	plugins: [react(), tailwindcss()],
 	test: {
 		browser: {
 			enabled: true,

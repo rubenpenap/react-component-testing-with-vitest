@@ -35,13 +35,14 @@ Now all that remains is to tell Vitest to use this file as the global setup for 
 
 In `vite.config.ts`, I will provide the path to this setup file as the value for the `setupFiles` property on the current browser instance:
 
-```ts filename=vite.config.ts add=15
+```ts filename=vite.config.ts add=16
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-	plugins: [react()],
+	plugins: [react(), tailwindcss()],
 	test: {
 		globals: true,
 		browser: {

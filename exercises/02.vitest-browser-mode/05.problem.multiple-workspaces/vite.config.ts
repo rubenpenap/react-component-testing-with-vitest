@@ -3,9 +3,10 @@ import { defineConfig } from 'vite'
 // 🐨 Import `defaultConfig` from `vitest/config`
 // 💰 import { foo } from 'bar'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-	plugins: [react()],
+	plugins: [react(), tailwindcss()],
 	// 🐨 Add a new property called `workspace`.
 	// As the value, provide an array with two entries.
 	// 💰 workspace: [{}, {}]

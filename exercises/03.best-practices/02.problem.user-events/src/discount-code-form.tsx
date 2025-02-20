@@ -21,7 +21,7 @@ export function DiscountCodeForm() {
 	}
 
 	return (
-		<section className="w-96 rounded-lg border bg-white p-10">
+		<section className="w-96 rounded-lg border border-gray-300 bg-white p-10">
 			{appliedDiscount ? (
 				<p>
 					Discount: <strong>{appliedDiscount.code}</strong> (-
@@ -36,7 +36,7 @@ export function DiscountCodeForm() {
 						<input
 							id="discountCode"
 							name="discountCode"
-							className="w-full rounded-md border px-2 py-1 focus:ring-4"
+							className="w-full rounded-md border border-gray-300 px-2 py-1 focus:ring-4"
 							placeholder="ABCD1234"
 							pattern="[A-Z]{4}[0-9]{4}"
 							autoComplete="off"

@@ -16,13 +16,14 @@ npx playwright install --with-deps chromium
 
 The next step is to tell Vitest to use Playwright as the browser provider for component tests. In `vite.config.ts`, set the `test.browser.provider` option to `'playwright'`:
 
-```ts filename=vite.config.ts add=11
+```ts filename=vite.config.ts add=12
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-	plugins: [react()],
+	plugins: [react(), tailwindcss()],
 	test: {
 		globals: true,
 		browser: {

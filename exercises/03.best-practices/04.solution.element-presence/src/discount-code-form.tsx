@@ -132,7 +132,7 @@ export function DiscountCodeForm() {
 	}
 
 	return (
-		<section className="w-96 rounded-lg border bg-white p-10">
+		<section className="w-96 rounded-lg border border-gray-300 bg-white p-10">
 			{state.submitting ? (
 				<p aria-hidden>
 					<span className="inline-block animate-spin font-bold">{'◡'}</span>
@@ -169,7 +169,7 @@ export function DiscountCodeForm() {
 						<input
 							id="discountCode"
 							name="discountCode"
-							className="w-full rounded-md border px-2 py-1 focus:ring-4"
+							className="w-full rounded-md border border-gray-300 px-2 py-1 focus:ring-4"
 							placeholder="ABCD1234"
 							pattern="[A-Z]{4}[0-9]{4}"
 							autoComplete="off"
@@ -189,7 +189,7 @@ export function DiscountCodeForm() {
 			{notification ? (
 				<p
 					role="alert"
-					className={`animation-slide animate-slide-in fixed bottom-5 right-5 rounded-lg border px-5 py-2.5 font-medium ${notification.type === 'error' ? 'border-red-800/20 bg-red-200' : 'border-yellow-800/20 bg-yellow-200'}`}
+					className={`animation-slide animate-slide-in fixed right-5 bottom-5 rounded-lg border px-5 py-2.5 font-medium ${notification.type === 'error' ? 'border-red-800/20 bg-red-200' : 'border-yellow-800/20 bg-yellow-200'}`}
 				>
 					{notification.text}
 				</p>

@@ -3,13 +3,15 @@
   "name": "exercises_01.sunsetting-jsdom_01.problem.break-jsdom",
   "scripts": {
     "dev": "vite --port=4000",
-    "test": "vitest"
+    "test": "vitest",
+    "build": "vite build"
   },
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.0.7",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
@@ -17,10 +19,8 @@
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/browser": "^3.0.5",
-    "autoprefixer": "^10.4.20",
     "jsdom": "^26.0.0",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^4.0.7",
     "vite": "^6.0.7",
     "vitest": "^3.0.5"
   }
