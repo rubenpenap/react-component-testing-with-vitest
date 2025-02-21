@@ -59,7 +59,7 @@ Let's go over them in more detail.
 
 The first workspace include the configuration for running unit tests:
 
-```ts nonumber
+```ts filename=vite.config.ts nonumber
 {
   test: {
 		name: 'unit',
@@ -80,7 +80,7 @@ The first workspace include the configuration for running unit tests:
 
 Similarly, here's the workspace for the browser (component) tests:
 
-```ts nonumber
+```ts filename=vite.config.ts nonumber
 {
 	test: {
 		name: 'browser',
@@ -142,7 +142,7 @@ Next, I rename the existing `tsconfig.test.json` to `tsconfig.test.browser.json`
 ```json highlight=3,7
 {
 	"extends": "./tsconfig.base.json",
-	"include": ["**/*.browser.test.ts*"],
+	"include": ["vitest.browser.setup.ts", "**/*.browser.test.ts*"],
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "preserve",
