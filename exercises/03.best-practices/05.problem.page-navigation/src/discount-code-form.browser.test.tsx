@@ -68,9 +68,12 @@ test('displays an error when fetching the discount fails', async ({
 	worker,
 }) => {
 	worker.use(
-		http.post('https://api.example.com/discount/code', () => {
-			return new HttpResponse(null, { status: 500 })
-		}),
+		http.post<never, string, Discount>(
+			'https://api.example.com/discount/code',
+			() => {
+				return new HttpResponse(null, { status: 500 })
+			},
+		),
 	)
 
 	// 🐨 Provide the `wrapper` for this render.
