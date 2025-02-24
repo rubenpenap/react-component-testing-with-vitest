@@ -5,6 +5,6 @@ import { FilePreview } from './file-preview.tsx'
 test('displays the preview card', async () => {
 	render(<FilePreview file={new File(['hello world'], 'file.txt')} />)
 
-	await expect.element(page.getByText('file.txt')).toBeTruthy()
-	await expect.element(page.getByText('hello world')).toBeTruthy()
+	await expect.element(page.getByText('file.txt')).toBeVisible()
+	await expect.element(page.getByText('hello world')).toBeVisible()
 })

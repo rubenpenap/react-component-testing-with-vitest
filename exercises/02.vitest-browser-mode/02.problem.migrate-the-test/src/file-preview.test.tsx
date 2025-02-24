@@ -15,9 +15,9 @@ test('displays the preview card', async () => {
 		// 🐨 Replace the `screen.getByText` function with
 		// `page.getByText`.
 		screen.getByText('file.txt'),
-	).toBeTruthy()
+	).toBeVisible()
 
 	// 🐨 Using the previous assertion as an example,
 	// apply the necessary changes to this `expect` as well.
-	expect(screen.getByText('hello world')).toBeTruthy()
+	expect(screen.getByText('hello world')).toBeVisible()
 })

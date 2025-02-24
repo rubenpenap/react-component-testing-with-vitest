@@ -24,8 +24,8 @@ Here, two things have my interest:
 I reflect those two expectations like so:
 
 ```tsx nonumber nocopy
-expect(screen.getByText('file.txt')).toBeTruthy()
-expect(screen.getByText('hello world')).toBeTruthy()
+expect(screen.getByText('file.txt')).toBeVisible()
+expect(screen.getByText('hello world')).toBeVisible()
 ```
 
 Looks like the first test is done. All that's left is to run via `npm test` and... Oh, no.

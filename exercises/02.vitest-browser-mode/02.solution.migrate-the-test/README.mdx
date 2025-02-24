@@ -70,8 +70,8 @@ Finally, it's time to adjust the assertions around the elements rendered by our 
 This is how they looked like before:
 
 ```tsx filename=file-preview.test.tsx nonumber
-expect(page.getByText('file.txt')).toBeTruthy()
-expect(page.getByText('hello world')).toBeTruthy()
+expect(page.getByText('file.txt')).toBeVisible()
+expect(page.getByText('hello world')).toBeVisible()
 ```
 
 There's a few things to change here.
