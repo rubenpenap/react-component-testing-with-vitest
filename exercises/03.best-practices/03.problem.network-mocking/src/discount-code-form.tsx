@@ -97,7 +97,6 @@ export function DiscountCodeForm() {
 				}
 			})
 			.catch((error) => {
-				console.error(error)
 				notify('Failed to apply the discount code', 'error')
 				dispatch({ type: 'idle' })
 			})
