@@ -51,27 +51,9 @@ import { setupWorker } from 'msw/browser'
 import { handlers } from './handlers.js'
 
 export const worker = setupWorker(...handlers)
-
-export async function startWorker() {
-	await worker.start({
-		quiet: true,
-		onUnhandledRequest(request, print) {
-			if (/(\.(css|tsx?|woff2?))/.test(request.url)) {
-				return
-			}
-
-			print.error()
-		},
-	})
-}
 ```
 
-Let's briefly go over what's happening here:
-
-- The `setupWorker()` function prepares a Service Worker instance configured with the given request `handlers`. Note that it _doesn't start it_ just yet!
-- The `startWorker()` function abstracts starting the worker so we can potentially reuse it in multiple places.
-  - `quiet: true` disables MSW logging to keep our consoles clean.
-  - `onUnhandledRequest` decides how to handle requests that you don't have mocks for. In this case, we are ignoring any asset requests while reacting to any other unhandled requests with an error.
+> The `setupWorker()` function prepares a Service Worker instance configured with the given request `handlers`. Note that it _doesn't start_ the request interception just yet!
 
 After this step, you would normally introduce the `enableMocking()` function and wrap it around your application's initialization. With Vitest Browser Mode, the root of your app (`main.tsx`) doesn't run in tests so you need to start MSW differently.
 
@@ -85,11 +67,15 @@ Since it's a new TypeScript module, you need to tell TypeScript how to handle it
 
 🐨 In <InlineFile file="tsconfig.test.browser.json">`tsconfig.test.browser.json`</InlineFile>, add `"test-extend.ts"` to the `include` array:
 
-```json filename=tsconfig.test.browser.json remove=3 add=4
+```json filename=tsconfig.test.browser.json remove=3 add=4-8 highlight=7
 {
 	"extends": "./tsconfig.base.json",
-	"include": ["**/*.browser.test.ts*"],
-	"include": ["**/*.browser.test.ts*", "test-extend.ts"],
+	"include": ["vitest.browser.setup.ts", "**/*.browser.test.ts*"],
+	"include": [
+		"vitest.browser.setup.ts",
+		"**/*.browser.test.ts*",
+		"test-extend.ts"
+	],
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "preserve",
@@ -130,14 +116,17 @@ Right now, the `worker` property has an array of two elements: `fixture` and `op
 
 🐨 Provide the following fixture for the `worker`:
 
-```ts filename=test-extend.ts add=2,6-10
+```ts filename=test-extend.ts add=2,6-13
 import { test as testBase } from 'vitest'
-import { startWorker, worker } from './src/mocks/browser.js'
+import { worker } from './src/mocks/browser.js'
 
 export const test = testBase.extend({
 	worker: [
 		async ({}, use) => {
-			await startWorker()
+			await worker.start({
+				quiet: true,
+				onUnhandledRequest: 'error',
+			})
 			await use(worker)
 			worker.stop()
 		},
@@ -146,7 +135,9 @@ export const test = testBase.extend({
 })
 ```
 
-In this fixture, you are telling Vitest to start the worker (`await startWorker()` from `src/mocks/browser.js` you've prepared earlier), then expose it to the test (`await use(worker)`), and finally call `worker.stop()` after the test is done.
+In this fixture, you are staring the MSW'w worker by calling `await worker.start()`. Here, you're providing `quiet: true` to disable MSW logging intercepted requests in the console during the test run to have a less noisy output, and also the `onUnhandledRequest: 'error'` option so the library errors if there are any requests in tests that you haven't handled.
+
+Then, you expose that `worker` reference so it can be accessed in tests (the `await use(worker)` part). And, finally, `worker.stop()` stops the mocking after the test has finished.
 
 🐨 To help Vitest understand the types of this `worker` fixture, annotate it explicitly by creating a new type called `TestContext`, describing the worker there, and providing it as a type argument to `test.extend()`:
 
@@ -174,14 +165,21 @@ You want MSW up and running _in every test_ so you can take advantage of its req
 
 🐨 To do that, configure the `worker` fixture to have the `auto: true` option:
 
-```ts filename=test-extend.ts add=11
+```ts filename=test-extend.ts add=18
 import { test as testBase } from 'vitest'
-import { startWorker, worker } from './src/mocks/browser.js'
+import { worker } from './src/mocks/browser.js'
 
-export const test = testBase.extend({
+type TestContext = {
+	worker: typeof worker
+}
+
+export const test = testBase.extend<TestContext>({
 	worker: [
 		async ({}, use) => {
-			await startWorker()
+			await worker.start({
+				quiet: true,
+				onUnhandledRequest: 'error',
+			})
 			await use(worker)
 			worker.stop()
 		},
@@ -218,7 +216,7 @@ This request handler will intercept any matching requests and execute the callba
 
 Our component expects a response from the server to have the following shape:
 
-```ts
+```ts nonumber
 {
 	code: string
 	amount: number

@@ -108,8 +108,8 @@ import { App } from './app.jsx'
 
 async function enableMocking() {
 	if (process.env.NODE_ENV === 'development') {
-		const { startWorker } = await import('./mocks/browser.js')
-		await startWorker()
+		const { worker } = await import('./mocks/browser.js')
+		await worker.start()
 	}
 }
 
@@ -127,7 +127,7 @@ enableMocking().then(() => {
 This functions does a couple of things:
 
 1. Imports the `./mocks/browser.js` module _conditionally_ to enable MSW only in development;
-1. Calls the `startWorker()` function to actually register and start the Service Worker. This is the same function you've used in `test-extend.ts`!
+1. Calls `await worker.start()` to actually register and start the Service Worker.
 
 ## Related materials
 

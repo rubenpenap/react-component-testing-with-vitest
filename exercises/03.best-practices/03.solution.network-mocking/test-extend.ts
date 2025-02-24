@@ -1,5 +1,5 @@
 import { test as testBase } from 'vitest'
-import { startWorker, worker } from './src/mocks/browser.js'
+import { worker } from './src/mocks/browser.js'
 
 type TestContext = {
 	worker: typeof worker
@@ -8,7 +8,10 @@ type TestContext = {
 export const test = testBase.extend<TestContext>({
 	worker: [
 		async ({}, use) => {
-			await startWorker()
+			await worker.start({
+				quiet: true,
+				onUnhandledRequest: 'error',
+			})
 			await use(worker)
 			worker.stop()
 		},
