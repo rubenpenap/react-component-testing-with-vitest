@@ -116,7 +116,7 @@ Right now, the `worker` property has an array of two elements: `fixture` and `op
 
 🐨 Provide the following fixture for the `worker`:
 
-```ts filename=test-extend.ts add=2,6-13
+```ts filename=test-extend.ts add=2,6-14
 import { test as testBase } from 'vitest'
 import { worker } from './src/mocks/browser.js'
 
@@ -128,6 +128,7 @@ export const test = testBase.extend({
 				onUnhandledRequest: 'error',
 			})
 			await use(worker)
+			worker.resetHandlers()
 			worker.stop()
 		},
 		options,
@@ -135,9 +136,38 @@ export const test = testBase.extend({
 })
 ```
 
-In this fixture, you are staring the MSW'w worker by calling `await worker.start()`. Here, you're providing `quiet: true` to disable MSW logging intercepted requests in the console during the test run to have a less noisy output, and also the `onUnhandledRequest: 'error'` option so the library errors if there are any requests in tests that you haven't handled.
+Let's unwrap individual pieces of this fixture:
 
-Then, you expose that `worker` reference so it can be accessed in tests (the `await use(worker)` part). And, finally, `worker.stop()` stops the mocking after the test has finished.
+```ts nonumber
+await worker.start({
+	quiet: true,
+	onUnhandledRequest: 'error',
+})
+```
+
+Here, you are starting the worker that enables request mocking in MSW. You are referencing the same `worker` object you've configured previously in `src/mocks/browser.js`.
+
+```ts nonumber
+await use(worker)
+```
+
+This line exposes the `worker` object as a fixture in your tests. It makes it possible for you to reference the same worker object across different tests like so:
+
+```ts nonumber
+test('...', ({ worker }) => {})
+```
+
+```ts nonumber
+worker.resetHandlers()
+```
+
+This line makes sure that any mocks you add in individual tests are _reset_ between them. This achieves scope isolation and prevents network overrides from leaking to irrelevant tests.
+
+```ts
+worker.stop()
+```
+
+And, finally, you're stopping the worker, effectively turning off the request interception.
 
 🐨 To help Vitest understand the types of this `worker` fixture, annotate it explicitly by creating a new type called `TestContext`, describing the worker there, and providing it as a type argument to `test.extend()`:
 
@@ -165,7 +195,7 @@ You want MSW up and running _in every test_ so you can take advantage of its req
 
 🐨 To do that, configure the `worker` fixture to have the `auto: true` option:
 
-```ts filename=test-extend.ts add=18
+```ts filename=test-extend.ts add=19
 import { test as testBase } from 'vitest'
 import { worker } from './src/mocks/browser.js'
 
@@ -181,6 +211,7 @@ export const test = testBase.extend<TestContext>({
 				onUnhandledRequest: 'error',
 			})
 			await use(worker)
+			worker.resetHandlers()
 			worker.stop()
 		},
 		{ auto: true },

@@ -13,6 +13,7 @@ export const test = testBase.extend<TestContext>({
 				onUnhandledRequest: 'error',
 			})
 			await use(worker)
+			worker.resetHandlers()
 			worker.stop()
 		},
 		{ auto: true },

@@ -155,9 +155,9 @@ export function DiscountCodeForm() {
 					/>
 					<button
 						aria-label="Remove discount"
-						className="size-8 rounded-md border text-slate-500 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-700 focus:ring-4"
+						className="size-8 rounded-md border border-gray-300 text-slate-500 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-700 focus:ring-4"
 					>
-						✗
+						✕
 					</button>
 				</form>
 			) : (
