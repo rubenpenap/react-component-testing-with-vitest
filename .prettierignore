@@ -2,6 +2,6 @@
 **/.cache/**
 **/build/**
 **/dist/**
-**/public/build/**
+**/public/**
 **/package-lock.json
 **/playwright-report/**
