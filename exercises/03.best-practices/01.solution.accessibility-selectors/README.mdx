@@ -53,6 +53,8 @@ Now to make sure that the input is visible for the user, I will write an asserti
 await expect.element(discountInput).toBeVisible()
 ```
 
+> 🦉 You can also _chain locators_ to access more specific elements. For example, `page.getByRole('navigation').getByRole('link', { name: 'My projects' })` is a great way to find a "My projects" link that is nested under the `role="navigation"`/`<nav>` parent, especially if there are multiple links with the same accessible name on the page.
+
 So far so good!
 
 Next on the list is the button that makes the whole form do something—the submit button. While I can select it by its text `'Apply discount'`, that would be quite a broad query. There can be _multiple elements_ with that same text on the page (e.g. a heading that also says "Apply discount"). A far more important desctiptor for this element is that _it is a button_.
