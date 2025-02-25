@@ -29,7 +29,7 @@ But worry not, there's a neat way to connect the two!
 
 🐨 Create a new directory `.vscode` and add a new file there called `launch.json` with this content:
 
-```json
+```json filename=.vscode/launch.json
 {
 	"version": "0.2.0",
 	"configurations": [
@@ -65,11 +65,11 @@ This configuration tells Visual Studio Code how to launch your application (in o
   - `--inspect-brk`, which tells Node.js to spawn a debugger process. If provided, Vitest will arrange appropriate debugging mode in your browser provider automatically;
   - `--browser`, which tells Vitest to run only the browser tests/workspaces;
   - `--no-file-parallelism`, which forces Vitest to run our test cases in sequence (required for the debugger to work properly).
-- `Attach to Vitest Browser`, which will attach a Chome DevTools instance to the debugging process exposed by Vitest.
+- `Attach to Vitest Browser`, which will attach a Chome DevTools instance exposed by the browser tests to the built-in debugger in Visual Studio Code. This will allow you to control the debugging experience directly from your IDE.
 
-Then, we combine these two tasks in a single `compound` task called `Debug Vitest Browser`.
+Then, we combine these two tasks to run at the same time under a single `compound` task called `Debug Vitest Browser`.
 
-> 🦉 I am also setting the `env.DEBUG` variable to `'true'` to conditionally run my browser tests in a "headful" mode. That way, I can see what's going on on the page while debugging my tests. Take a look at <InlineFile file="./vite.config.ts">`vite.config.ts`</InlineFile> to see how that variable is referenced.
+> 🦉 I am also setting the `env.DEBUG` variable to `'true'` to conditionally run the browser tests in a headless mode mode. That way, I can see what's going on on the page while debugging my tests. Take a look at <InlineFile file="./vite.config.ts">`vite.config.ts`</InlineFile> to see how that environment variable is used.
 
 Once this is done, you can start your browser tests in a debug mode by openning the "Run and debug" window (Shift+Cmd+D) and run the "Debug Vitest Browser" task from the dropdown at the top:
 
