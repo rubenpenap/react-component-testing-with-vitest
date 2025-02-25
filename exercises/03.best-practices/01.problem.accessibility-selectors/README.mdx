@@ -8,3 +8,5 @@ The way you access different elements in tests matters a lot. It can vary from g
 
 👨‍💼 In this exercise, your task is to write a simple integration test for a new React component called <InlineFile file="./src/discount-code-form.tsx">
 `<DiscountCodeForm />`</InlineFile>. And what do you know—this component is a _form_! This means plenty of elements for you to locate. Use locators like `.getByRole()` and `.getByLabelText()`, and write assertions that make sure all the necessary form elements are present on the page.
+
+> Note that I've made the browser tests run in a _headless_ mode by setting `test.browser.headless` to `true` in <InlineFile file="./vite.config.ts">`vite.configt.ts`</InlineFile>.
