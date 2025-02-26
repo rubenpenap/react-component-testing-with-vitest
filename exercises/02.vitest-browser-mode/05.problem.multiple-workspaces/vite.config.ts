@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
-// 🐨 Import `defaultConfig` from `vitest/config`
+// 🐨 Import `configDefaults` from `vitest/config`
 // 💰 import { foo } from 'bar'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
@@ -9,7 +9,7 @@ export default defineConfig({
 	plugins: [react(), tailwindcss()],
 	// 🐨 Add a new property called `workspace`.
 	// As the value, provide an array with two entries.
-	// 💰 workspace: [{}, {}]
+	// 💰 test: { workspace: [{}, {}] }
 	//
 	// 🐨 In the first entry of the `workspace` array,
 	// define a `test` property and give it a `test.name` equal to "unit".
@@ -31,17 +31,17 @@ export default defineConfig({
 	// default values to ignore tests from `node_modules`, for example.
 	// 💰 exclude: [...defaultConfig.exclude, '**/*.browser.test.ts(x)?']
 	//
-	// 🐨 Now, switch to the second entry in the `workspace`
-	// array. There, give it the following properties:
+	// Now, switch to the second entry in the `workspace` array.
+	// 🐨 First, set the `extends` property to `true`. Let's extend the
+	// root-level options, like `plugins` to have consistent behavior in prod and tests.
+	// 💰 { extends: true, test: {} }
+	//
+	// 🐨 Next, add these properties to the `test` in this workspace:
 	// {
 	//   name: "browser",
 	//   globals: true,
 	//   include: ["**/*.browser.test.ts(x)?"]
 	// }
-	//
-	// 🐨 At the root-level of the browser workspace object
-	// set the `extends` property to true. This will use the
-	// root-level plugins, like `react()`, for browser tests.
 	//
 	// 🐨 Finally, copy the existing `browser` configuration
 	// under the `test` property of the second workspace.

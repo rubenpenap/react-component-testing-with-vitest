@@ -27,9 +27,9 @@ export default defineConfig({
 				test: {
 					name: 'unit',
 					globals: true,
+					environment: 'node',
 					include: ['**/*.test.ts'],
 					exclude: [...configDefaults.exclude, '**/*.browser.test.ts(x)?'],
-					environment: 'node',
 				},
 			},
 			{
@@ -64,9 +64,9 @@ The first workspace include the configuration for running unit tests:
   test: {
 		name: 'unit',
 		globals: true,
+		environment: 'node',
 		include: ['**/*.test.ts'],
 		exclude: ['**/*.browser.test.ts(x)?'],
-		environment: 'node',
   },
 },
 ```
@@ -82,6 +82,7 @@ Similarly, here's the workspace for the browser (component) tests:
 
 ```ts filename=vite.config.ts nonumber
 {
+	extends: true,
 	test: {
 		name: 'browser',
 		globals: true,
@@ -115,11 +116,9 @@ Let's start with the unit tests:
 ```json filename=tsconfig.test.unit.json
 {
 	"extends": "./tsconfig.base.json",
-	"include": ["**/*.test.ts*"],
-	"exclude": ["**/*.browser.test.ts*"],
+	"include": ["src/**/*.test.ts*"],
+	"exclude": ["src/**/*.browser.test.ts*"],
 	"compilerOptions": {
-		"target": "esnext",
-		"module": "preserve",
 		"types": ["node", "vitest/globals"]
 	}
 }
@@ -139,13 +138,16 @@ npm i -D @types/node
 
 Next, I rename the existing `tsconfig.test.json` to `tsconfig.test.browser.json` to act as the TypeScript configuration for my browser component tests:
 
-```json highlight=3,7
+```json highlight=6,10
 {
-	"extends": "./tsconfig.base.json",
-	"include": ["vitest.browser.setup.ts", "**/*.browser.test.ts*"],
+	"extends": "./tsconfig.app.json",
+	"include": [
+		"vitest.browser.setup.ts",
+		"src/**/*",
+		"src/**/*.browser.test.ts*"
+	],
+	"exclude": [],
 	"compilerOptions": {
-		"target": "esnext",
-		"module": "preserve",
 		"types": ["vitest/globals", "@vitest/browser/providers/playwright"]
 	}
 }

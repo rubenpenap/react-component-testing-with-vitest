@@ -12,9 +12,9 @@ export default defineConfig({
 				test: {
 					name: 'unit',
 					globals: true,
+					environment: 'node',
 					include: ['**/*.test.ts'],
 					exclude: [...configDefaults.exclude, '**/*.browser.test.ts(x)?'],
-					environment: 'node',
 				},
 			},
 			{
