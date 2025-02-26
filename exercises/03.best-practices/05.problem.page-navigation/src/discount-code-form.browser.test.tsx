@@ -2,7 +2,7 @@ import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { http, HttpResponse } from 'msw'
 import { test } from '../test-extend.js'
-import { DiscountCodeForm, type Discount } from './discount-code-form.js'
+import { DiscountCodeForm, type Discount } from './discount-code-form'
 
 // 🐨 Declare a new variable called `wrapper`.
 // Make it a React component that renders <MemoryRouter>

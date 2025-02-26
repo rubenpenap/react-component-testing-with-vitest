@@ -5,7 +5,7 @@ import { http, HttpResponse } from 'msw'
 // This custom `test` function exposes the `worker` object
 // you will use to access and use MSW in tests.
 // 💰 import { test } from '../test-extend.js'
-import { DiscountCodeForm } from './discount-code-form.js'
+import { DiscountCodeForm } from './discount-code-form'
 
 test('applies a discount code', async () => {
 	render(<DiscountCodeForm />)

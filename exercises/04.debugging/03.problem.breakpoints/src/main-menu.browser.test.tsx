@@ -1,7 +1,7 @@
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { MemoryRouter } from 'react-router'
-import { MainMenu } from './main-menu.js'
+import { MainMenu } from './main-menu'
 
 test('renders the currently active menu link', async () => {
 	// 🐨 Render the <MainMenu /> component.

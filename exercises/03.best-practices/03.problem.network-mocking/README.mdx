@@ -63,22 +63,21 @@ For that, you will use a _custom test context_.
 
 🐨 Create a new file called <InlineFile file="./test-extend.ts">`test-extend.ts`</InlineFile>.
 
-Since it's a new TypeScript module, you need to tell TypeScript how to handle it. Right now, no configurations include this module so writing any code there will error.
+Since it's a new TypeScript module, you need to tell TypeScript how to handle it. Right now, no configurations affect `test-extend.ts` and we have to fix that.
 
 🐨 In <InlineFile file="tsconfig.test.browser.json">`tsconfig.test.browser.json`</InlineFile>, add `"test-extend.ts"` to the `include` array:
 
-```json filename=tsconfig.test.browser.json remove=3 add=4-8 highlight=7
+```json filename=tsconfig.test.browser.json add=7
 {
-	"extends": "./tsconfig.base.json",
-	"include": ["vitest.browser.setup.ts", "**/*.browser.test.ts*"],
+	"extends": "./tsconfig.app.json",
 	"include": [
 		"vitest.browser.setup.ts",
-		"**/*.browser.test.ts*",
+		"src/**/*",
+		"src/**/*.browser.test.ts*",
 		"test-extend.ts"
 	],
+	"exclude": [],
 	"compilerOptions": {
-		"target": "esnext",
-		"module": "preserve",
 		"types": ["vitest/globals", "@vitest/browser/providers/playwright"]
 	}
 }

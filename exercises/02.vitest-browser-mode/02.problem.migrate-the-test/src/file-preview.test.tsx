@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react'
 //
 // 🐨 Import `render` from 'vitest-browser-react'.
 // 💰 import { foo } from 'bar'
-import { FilePreview } from './file-preview.tsx'
+import { FilePreview } from './file-preview'
 
 test('displays the preview card', async () => {
 	render(<FilePreview file={new File(['hello world'], 'file.txt')} />)

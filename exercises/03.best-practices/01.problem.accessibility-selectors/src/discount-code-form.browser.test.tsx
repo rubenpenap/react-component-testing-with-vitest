@@ -1,6 +1,6 @@
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
-import { DiscountCodeForm } from './discount-code-form.js'
+import { DiscountCodeForm } from './discount-code-form'
 
 test('renders the discount form', async () => {
 	render(<DiscountCodeForm />)

@@ -1,13 +1,13 @@
 {
-	"extends": "./tsconfig.base.json",
+	"extends": "./tsconfig.app.json",
 	"include": [
 		"vitest.browser.setup.ts",
-		"**/*.browser.test.ts*",
+		"src/**/*",
+		"src/**/*.browser.test.ts*",
 		"test-extend.ts"
 	],
+	"exclude": [],
 	"compilerOptions": {
-		"target": "esnext",
-		"module": "preserve",
 		"types": ["vitest/globals", "@vitest/browser/providers/playwright"]
 	}
 }

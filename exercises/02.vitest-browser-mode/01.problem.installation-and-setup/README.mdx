@@ -7,7 +7,7 @@ It's time to take the first step forward Vitest Browser Mode! In this one, you a
 As the first order of business, I'm going to uninstall the packages I won't be needing anymore:
 
 ```sh nonumber
-npm uninstall jsdom @testing-library/react @testing-library/jest-dom/vitest
+npm uninstall jsdom @testing-library/react @testing-library/jest-dom
 ```
 
 > 🦉 I am uninstalling React Testing Library because I won't be using it directly for my in-browser tests. **That doesn't mean its API and practices are gone!** Instead, I will continue using them through the Vitest and Playwright APIs that are inspired by RTL and promote its best practices.
@@ -76,13 +76,20 @@ export default defineConfig({
 
 The last thing that remains is to extend the TypeScript configuration to recognize DOM-specific matches, like `expect().toBeVisible()` as they come built-in in Vitest.
 
-```json filename=tsconfig.test.json add=10
+First, I will remove the `import '@testing-library/jest-dom/vitest'` import we previously had in the test:
+
+```tsx filename=file-preview.test.tsx remove=1
+import '@testing-library/jest-dom/vitest'
+```
+
+And replace it with a type reference to Vitest's browser matchers in `tsconfig.test.json`:
+
+```json filename=tsconfig.test.json add=9
 {
-	"extends": "./tsconfig.base.json",
-	"include": ["**/*.test.ts*"],
+	"extends": "./tsconfig.app.json",
+	"include": ["src/**/*", "src/**/*.test.ts*"],
+	"exclude": [],
 	"compilerOptions": {
-		"target": "esnext",
-		"module": "preserve",
 		"types": [
 			"vitest/globals",
 			// 👇

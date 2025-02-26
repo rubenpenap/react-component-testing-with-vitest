@@ -1,6 +1,6 @@
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
-import { TicTacToe } from './tic-tac-toe.js'
+import { TicTacToe } from './tic-tac-toe'
 
 test('places cross marks in a horizontal line', async () => {
 	const { debug } = render(<TicTacToe />)

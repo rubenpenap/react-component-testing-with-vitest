@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FilePreview } from './file-preview.jsx'
+import { FilePreview } from './file-preview'
 
 export function App() {
 	const [file, setFile] = useState<File>()
