@@ -65,27 +65,24 @@ That being said, you don't normally deal with HTML elements directly. Instead, y
 
 ## Element assertions
 
-Finally, it's time to adjust the assertions around the elements rendered by our `<FilePreview />` component.
-
-This is how they looked like before:
+With React Testing Library, our element assertions looked like this:
 
 ```tsx filename=file-preview.test.tsx nonumber
+expect(screen.getByText('file.txt')).toBeVisible()
+expect(screen.getByText('hello world')).toBeVisible()
+```
+
+Since `screen` has been replaced by `page` from Vitest, we need to adjust them.
+
+```tsx filename=file-preview.test.tsx nonumber remove=1,4 add=2,5
+expect(screen.getByText('file.txt')).toBeVisible()
 expect(page.getByText('file.txt')).toBeVisible()
+
+expect(screen.getByText('hello world')).toBeVisible()
 expect(page.getByText('hello world')).toBeVisible()
 ```
 
-There's a few things to change here.
-
-Now that I know that `page.getBy*` functions return _locators_, they will always be truthy and so the `.toBeTruthhy()` assertion makes little sense here. It wasn't written from the user's perspective, to begin with, and it would be best to use a more fitting matcher like `.toBeVisible()`:
-
-```tsx filename=file-preview.test.tsx nonumber
-expect(page.getByText('file.txt')).toBeVisible()
-//                                 ^^^^^^^^^^^^^
-expect(page.getByText('hello world')).toBeVisible()
-//                                    ^^^^^^^^^^^^^
-```
-
-On its own, this is enough. But there's one more thing that can make these assertions stellar. I can use `expect.element()` instead of `expect()` to have a built-in retry for resolving the given locators:
+There's one more thing we can do to make these assertions rock-solid. If we use `await expect.element()` instead of plain `expect()`, we can rely on Vitest's built-in retry mechanism when resolving the given locators;
 
 ```tsx filename=file-preview.test.tsx nonumber
 await expect.element(page.getByText('file.txt')).toBeVisible()
