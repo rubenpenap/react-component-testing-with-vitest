@@ -19,14 +19,18 @@ import './src/index.css'
 
 Since we added this new file, we have to tell TypeScript how it should be handled. In `tsconfig.test.json`, add `vitest.browser.setup.ts` to the `compilerOptions.include` array:
 
-```json filename=tsconfig.test.json add=6
+```json filename=tsconfig.test.json add=5
 {
+	"extends": "./tsconfig.app.json",
+	"include": [
+		// The setup file runs in the browser just like the test suite.
+		"vitest.browser.setup.ts",
+		"src/**/*",
+		"src/**/*.test.ts*"
+	],
+	"exclude": [],
 	"compilerOptions": {
-		"include": [
-			"**/*.test.ts*",
-			// The setup file runs in the browser just like the test suite.
-			"vitest.browser.setup.ts"
-		]
+		"types": ["vitest/globals", "@vitest/browser/providers/playwright"]
 	}
 }
 ```

@@ -18,7 +18,7 @@ I think this is a great problem for you to fix!
 
 🐨 First, create a <InlineFile file="vitest.browser.setup.ts">`vitest.browser.setup.ts`</InlineFile> file. In that file, import any assets you wish to apply to _all tests_ (e.g. `./src/index.css`).
 
-🐨 Enable TypeScript for the new file by adding it to the `include` array in <InlineFile file="tsconfig.node.json">`tsconfig.node.json`</InlineFile>.
+🐨 Enable TypeScript for the new file by adding it to the `include` array in <InlineFile file="tsconfig.test.json">`tsconfig.test.json`</InlineFile>.
 
 Once you do all this, you will spot that the `*.css` imports fail to resolve in TypeScript.
 
