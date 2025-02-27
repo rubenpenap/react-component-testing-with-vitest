@@ -4,7 +4,7 @@ So far we've covered finding and interacting with elements that are present or w
 
 This is where you would normally reach for an [inverse assertion](https://www.epicweb.dev/inverse-assertions) to get a predictable result and guard yourself from false-positive tests:
 
-```ts
+```ts nonumber
 const notificationVisiblePromise = vi.waitFor(() => {
 	expect(notification).toBeVisible()
 })
@@ -17,7 +17,7 @@ await expect(notificationVisiblePromise).rejects.toThrow()
 
 Or, alternatively, use the designated `waitForElementToBeRemoved()` utility from React Testing Library:
 
-```ts
+```ts nonumber
 await waitForElementToBeRemoved(notification)
 ```
 

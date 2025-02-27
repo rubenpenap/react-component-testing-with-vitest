@@ -8,7 +8,7 @@ import { DiscountCodeForm, type Discount } from './discount-code-form'
 // Make it a React component that renders <MemoryRouter>
 // from the "react-router" package around any `children`
 // provided to the `wrapper` component.
-// 💰 const wrapper: React.JSXElementConstructor<{ children: React.ReactNode }> => () => {}
+// 💰 const wrapper: React.JSXElementConstructor<{ children: React.ReactNode }> = () => {}
 // 💰 <MemoryRouter>{children}</MemoryRouter>
 
 test('applies a discount code', async () => {
@@ -119,11 +119,14 @@ test('displays the "Back to cart" link', async () => {
 	// 🐨 Provide the `wrapper` for this render.
 	render(<DiscountCodeForm />)
 
-	// 🐨 Locate the "Back to cart" link on the page.
-	// Assign its locator to a variable called `backToCartLink`.
+	// 🐨 Declare a new variable called `backToCartLink` and
+	// assign it a locator of the element with the role "link"
+	// and accessible text "Back to cart".
 	// 💰 page.getByRole(role, { name })
 
-	// 🐨 Write an assertion that the `backToCartLink` has the
-	// correct value of the "href" attribute.
+	// 🐨 Add an assertion that the `backToCartLink` element is visible.
+
+	// 🐨 Add another assertion that the `backToCartLink` has the
+	// correct value of the "href" attribute ("/cart").
 	// 💰 .toHaveAttribute(attributeName, attributeValue)
 })

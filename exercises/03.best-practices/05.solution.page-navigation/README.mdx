@@ -60,6 +60,19 @@ test('displays the "Back to cart" link', async () => {
 })
 ```
 
+Next, I will add a quick assertion that this link is visible:
+
+```tsx filename=discount-code-form.browser.test.tsx add=5
+test('displays the "Back to cart" link', async () => {
+	render(<DiscountCodeForm />, { wrapper })
+
+	const backToCartLink = page.getByRole('link', { name: 'Back to cart' })
+	await expect.element(backToCartLink).toBeVisible()
+})
+```
+
+> 🦉 The `.toBeVisible()` matcher provides a bunch of implicit assertions to make sure that the element is visible and also **accessible** to the user.
+
 This is the moment where the user would click on the link and land on the cart page. **But our test is not going to do that**. Instead, all I will do is make sure that the link got rendered with the correct attributes:
 
 ```tsx filename=discount-code-form.browser.test.tsx add=5
