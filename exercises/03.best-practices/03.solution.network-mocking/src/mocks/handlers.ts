@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import type { Discount } from '../discount-code-form.js'
+import type { Discount } from '../discount-code-form'
 
 export const handlers = [
 	http.post<never, string, Discount>(

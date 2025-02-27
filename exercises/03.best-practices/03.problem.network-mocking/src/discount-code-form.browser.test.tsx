@@ -1,10 +1,10 @@
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { http, HttpResponse } from 'msw'
-// 🐨 Import the `test` function from `test-extend.js`.
+// 🐨 Import the `test` function from `test-extend`.
 // This custom `test` function exposes the `worker` object
 // you will use to access and use MSW in tests.
-// 💰 import { test } from '../test-extend.js'
+// 💰 import { test } from '../test-extend'
 import { DiscountCodeForm } from './discount-code-form'
 
 test('applies a discount code', async () => {
@@ -50,6 +50,8 @@ test('displays a warning for legacy discount codes', async ({
 
 	// 🐨 Write an assertion that expects the text element
 	// with the applied discount code to be visible on the page.
+	// 💰 "Discount: LEGA2000 (-10%)"
+	// 💰 await expect.element(locator).toBeVisible()
 	//
 	// 🐨 Write another assertion that expected the warning
 	// to appear, notifying the user about the legacy discount code.

@@ -1,7 +1,7 @@
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { http, HttpResponse } from 'msw'
-import { test } from '../test-extend.js'
+import { test } from '../test-extend'
 import { DiscountCodeForm, type Discount } from './discount-code-form'
 
 test('applies a discount code', async () => {

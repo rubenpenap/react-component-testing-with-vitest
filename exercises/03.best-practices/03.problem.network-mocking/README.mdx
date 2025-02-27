@@ -48,7 +48,7 @@ export const handlers = []
 
 ```ts filename=src/mocks/browser.ts
 import { setupWorker } from 'msw/browser'
-import { handlers } from './handlers.js'
+import { handlers } from './handlers'
 
 export const worker = setupWorker(...handlers)
 ```
@@ -96,7 +96,7 @@ import { test as testBase } from 'vitest'
 ```ts filename=test-extend.ts add=3
 import { test as testBase } from 'vitest'
 
-export const test = testBase.extend()
+export const test = testBase.extend({})
 ```
 
 > :owl: Calling `.extend()` allows you to put _custom properties_ you can then access on the `test()` function.
@@ -117,7 +117,7 @@ Right now, the `worker` property has an array of two elements: `fixture` and `op
 
 ```ts filename=test-extend.ts add=2,6-14
 import { test as testBase } from 'vitest'
-import { worker } from './src/mocks/browser.js'
+import { worker } from './src/mocks/browser'
 
 export const test = testBase.extend({
 	worker: [
@@ -144,7 +144,7 @@ await worker.start({
 })
 ```
 
-Here, you are starting the worker that enables request mocking in MSW. You are referencing the same `worker` object you've configured previously in `src/mocks/browser.js`.
+Here, you are starting the worker that enables request mocking in MSW. You are referencing the same `worker` object you've configured previously in `src/mocks/browser.ts`.
 
 ```ts nonumber
 await use(worker)
@@ -162,7 +162,7 @@ worker.resetHandlers()
 
 This line makes sure that any mocks you add in individual tests are _reset_ between them. This achieves scope isolation and prevents network overrides from leaking to irrelevant tests.
 
-```ts
+```ts nonumber
 worker.stop()
 ```
 
