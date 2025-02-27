@@ -42,6 +42,9 @@ function MenuItemsList(props: { items: Array<MenuItem> }) {
 					location.pathname,
 				)
 
+				// 🐨 Right-click on the gutter next to the line with the `return`
+				// and choose "Add Conditional Breakpoint...".
+				// 🐨 Enter `item.title === 'Dashboard'` as the breakpoint's condition.
 				return (
 					<li key={item.url}>
 						<NavLink

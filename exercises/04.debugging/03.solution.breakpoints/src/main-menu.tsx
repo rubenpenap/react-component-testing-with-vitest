@@ -50,6 +50,7 @@ function MenuItemsList(props: { items: Array<MenuItem> }) {
 								'px-2 py-1 hover:text-blue-600 hover:underline',
 								isActive ? 'font-bold text-black' : 'text-gray-600',
 							].join(' ')}
+							end={true}
 						>
 							{item.title}
 						</NavLink>

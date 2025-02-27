@@ -116,7 +116,7 @@ Sometimes the rendered element tree is too large to digest all at once. This is 
 You can print a single or multiple elements by providing their locators to the `debug()` function:
 
 ```tsx nonumber
-debug(page.getByRole('button', { name /middle/ }))
+debug(page.getByRole('button', { name: /middle/ }).elements())
 ```
 
 For example, the code above will print all the buttons that have `middle` in their accessible name. Note that the elements you provide to `debug()` don't have to be related in any way. This means you can cherry-pick only those sections of the markup that interest you:

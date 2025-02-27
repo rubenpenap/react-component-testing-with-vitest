@@ -15,6 +15,7 @@ test('renders the currently active menu link', async () => {
 	// 🐨 Create another variable called `currentPageLink`.
 	// For its value, try to find a link element from `allLinks`
 	// whose "aria-current" attribute equals to "page".
+	// 💰 allLinks.find(predicate)!
 	// 💰 element.getAttribute(attributeName)
 	//
 	// 🐨 Finally, write an assertion that the `currentPageLink`
