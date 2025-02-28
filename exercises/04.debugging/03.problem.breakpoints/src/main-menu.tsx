@@ -1,4 +1,4 @@
-import { matchPath, NavLink, useLocation } from 'react-router'
+import { NavLink } from 'react-router'
 
 interface MenuItem {
 	title: string
@@ -31,28 +31,34 @@ const menuItems: Array<MenuItem> = [
 	},
 ] as const
 
-function MenuItemsList(props: { items: Array<MenuItem> }) {
-	const location = useLocation()
-
+function MenuItemsList({ items }: { items: Array<MenuItem> }) {
 	return (
 		<ul className="ml-4">
-			{props.items.map((item) => {
-				const isActive = matchPath(
-					{ path: item.url, end: false },
-					location.pathname,
-				)
-
-				// 🐨 Right-click on the gutter next to the line with the `return`
-				// and choose "Add Conditional Breakpoint...".
-				// 🐨 Enter `item.title === 'Dashboard'` as the breakpoint's condition.
+			{items.map((item) => {
 				return (
 					<li key={item.url}>
 						<NavLink
 							to={item.url}
-							className={[
-								'px-2 py-1 hover:text-blue-600 hover:underline',
-								isActive ? 'font-bold text-black' : 'text-gray-600',
-							].join(' ')}
+							className={({ isActive }) =>
+								[
+									'px-2 py-1 hover:text-blue-600 hover:underline',
+
+									// You will be adding a Conditional breakpoint on this line.
+									// But before you do, there's a slight problem. Conditions can only access
+									// variable from the current scope (the `className` function), and our `item`
+									// lives in the parent scope.
+									//
+									// 🐨 Reference the `item` here to be used in the condition for the breakpoint.
+									// 💰 item && isActive
+									//
+									// 🐨 Next, right-click on the gutter to the left of this line and choose
+									// the "Add Conditional Breakpoint..." option. Enter `item.title === 'Dashboard'`
+									// as the condition for the breakpoint.
+									//
+									// 🐨 Finally, run the main menu test suite in the debug mode to see what's wrong.
+									isActive ? 'font-bold text-black' : 'text-gray-600',
+								].join(' ')
+							}
 						>
 							{item.title}
 						</NavLink>
