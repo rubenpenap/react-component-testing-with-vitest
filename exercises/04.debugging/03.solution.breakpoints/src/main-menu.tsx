@@ -1,4 +1,4 @@
-import { matchPath, NavLink, useLocation } from 'react-router'
+import { NavLink } from 'react-router'
 
 interface MenuItem {
 	title: string
@@ -31,26 +31,21 @@ const menuItems: Array<MenuItem> = [
 	},
 ] as const
 
-function MenuItemsList(props: { items: Array<MenuItem> }) {
-	const location = useLocation()
-
+function MenuItemsList({ items }: { items: Array<MenuItem> }) {
 	return (
 		<ul className="ml-4">
-			{props.items.map((item) => {
-				const isActive = matchPath(
-					{ path: item.url, end: true },
-					location.pathname,
-				)
-
+			{items.map((item) => {
 				return (
 					<li key={item.url}>
 						<NavLink
 							to={item.url}
-							className={[
-								'px-2 py-1 hover:text-blue-600 hover:underline',
-								isActive ? 'font-bold text-black' : 'text-gray-600',
-							].join(' ')}
 							end={true}
+							className={({ isActive }) =>
+								[
+									'px-2 py-1 hover:text-blue-600 hover:underline',
+									isActive ? 'font-bold text-black' : 'text-gray-600',
+								].join(' ')
+							}
 						>
 							{item.title}
 						</NavLink>

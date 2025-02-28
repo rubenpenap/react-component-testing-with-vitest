@@ -1,96 +1,92 @@
 {
-	"files": [],
-	"exclude": ["node_modules"],
-	"references": [
-		{
-			"path": "exercises/01.sunsetting-jsdom/01.problem.break-jsdom"
-		},
-		{
-			"path": "exercises/01.sunsetting-jsdom/01.solution.break-jsdom"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/01.problem.installation-and-setup"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/01.solution.installation-and-setup"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/02.problem.migrate-the-test"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/02.solution.migrate-the-test"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/03.problem.playwright"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/03.solution.playwright"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/04.problem.shared-assets"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/04.solution.shared-assets"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/05.problem.multiple-workspaces"
-		},
-		{
-			"path": "exercises/02.vitest-browser-mode/05.solution.multiple-workspaces"
-		},
-		{
-			"path": "exercises/03.best-practices/01.problem.accessibility-selectors"
-		},
-		{
-			"path": "exercises/03.best-practices/01.solution.accessibility-selectors"
-		},
-		{
-			"path": "exercises/03.best-practices/02.problem.user-events"
-		},
-		{
-			"path": "exercises/03.best-practices/02.solution.user-events"
-		},
-		{
-			"path": "exercises/03.best-practices/03.problem.network-mocking"
-		},
-		{
-			"path": "exercises/03.best-practices/03.solution.network-mocking"
-		},
-		{
-			"path": "exercises/03.best-practices/04.problem.element-presence"
-		},
-		{
-			"path": "exercises/03.best-practices/04.solution.element-presence"
-		},
-		{
-			"path": "exercises/03.best-practices/05.problem.page-navigation"
-		},
-		{
-			"path": "exercises/03.best-practices/05.solution.page-navigation"
-		},
-		{
-			"path": "exercises/04.debugging/01.problem.dom-snapshots"
-		},
-		{
-			"path": "exercises/04.debugging/01.solution.dom-snapshots"
-		},
-		{
-			"path": "exercises/04.debugging/02.problem.debugger"
-		},
-		{
-			"path": "exercises/04.debugging/02.solution.debugger"
-		},
-		{
-			"path": "exercises/04.debugging/03.problem.breakpoints"
-		},
-		{
-			"path": "exercises/04.debugging/03.solution.breakpoints"
-		},
-		{
-			"path": "exercises/04.debugging/04.problem.debug-console"
-		},
-		{
-			"path": "exercises/04.debugging/04.solution.debug-console"
-		}
-	]
+  "files": [],
+  "exclude": [
+    "node_modules"
+  ],
+  "references": [
+    {
+      "path": "exercises/01.sunsetting-jsdom/01.problem.break-jsdom"
+    },
+    {
+      "path": "exercises/01.sunsetting-jsdom/01.solution.break-jsdom"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/01.problem.installation-and-setup"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/01.solution.installation-and-setup"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/02.problem.migrate-the-test"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/02.solution.migrate-the-test"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/03.problem.playwright"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/03.solution.playwright"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/04.problem.shared-assets"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/04.solution.shared-assets"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/05.problem.multiple-workspaces"
+    },
+    {
+      "path": "exercises/02.vitest-browser-mode/05.solution.multiple-workspaces"
+    },
+    {
+      "path": "exercises/03.best-practices/01.problem.accessibility-selectors"
+    },
+    {
+      "path": "exercises/03.best-practices/01.solution.accessibility-selectors"
+    },
+    {
+      "path": "exercises/03.best-practices/02.problem.user-events"
+    },
+    {
+      "path": "exercises/03.best-practices/02.solution.user-events"
+    },
+    {
+      "path": "exercises/03.best-practices/03.problem.network-mocking"
+    },
+    {
+      "path": "exercises/03.best-practices/03.solution.network-mocking"
+    },
+    {
+      "path": "exercises/03.best-practices/04.problem.element-presence"
+    },
+    {
+      "path": "exercises/03.best-practices/04.solution.element-presence"
+    },
+    {
+      "path": "exercises/03.best-practices/05.problem.page-navigation"
+    },
+    {
+      "path": "exercises/03.best-practices/05.solution.page-navigation"
+    },
+    {
+      "path": "exercises/04.debugging/01.problem.dom-snapshots"
+    },
+    {
+      "path": "exercises/04.debugging/01.solution.dom-snapshots"
+    },
+    {
+      "path": "exercises/04.debugging/02.problem.debugger"
+    },
+    {
+      "path": "exercises/04.debugging/02.solution.debugger"
+    },
+    {
+      "path": "exercises/04.debugging/03.problem.breakpoints"
+    },
+    {
+      "path": "exercises/04.debugging/03.solution.breakpoints"
+    }
+  ]
 }
