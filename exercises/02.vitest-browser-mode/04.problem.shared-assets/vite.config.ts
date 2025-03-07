@@ -16,6 +16,9 @@ export default defineConfig({
 			instances: [
 				{
 					browser: 'chromium',
+					// 🐨 Add the `setupFiles` property and include the path
+					// to the "./vitest.browser.setup.ts" file.
+					// 💰 setupFiles: [filePath]
 				},
 			],
 		},
