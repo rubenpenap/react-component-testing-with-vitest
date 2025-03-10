@@ -16,8 +16,8 @@ export default defineConfig({
 					name: 'unit',
 					globals: true,
 					environment: 'node',
-					include: ['**/*.test.ts'],
-					exclude: [...configDefaults.exclude, '**/*.browser.test.ts(x)?'],
+					include: ['./src/**/*.test.ts'],
+					exclude: [...configDefaults.exclude, 'src/**/*.browser.test.ts(x)?'],
 				},
 			},
 			{
@@ -25,7 +25,7 @@ export default defineConfig({
 				test: {
 					name: 'browser',
 					globals: true,
-					include: ['**/*.browser.test.ts(x)?'],
+					include: ['./src/**/*.browser.test.ts(x)?'],
 					browser: {
 						enabled: true,
 						provider: 'playwright',
