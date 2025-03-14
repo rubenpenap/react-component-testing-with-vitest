@@ -1,5 +1,5 @@
 import { test as testBase } from 'vitest'
-import { worker } from './src/mocks/browser.js'
+import { worker } from './src/mocks/browser'
 
 type TestContext = {
 	worker: typeof worker

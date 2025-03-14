@@ -196,7 +196,7 @@ You want MSW up and running _in every test_ so you can take advantage of its req
 
 ```ts filename=test-extend.ts add=19
 import { test as testBase } from 'vitest'
-import { worker } from './src/mocks/browser.js'
+import { worker } from './src/mocks/browser'
 
 type TestContext = {
 	worker: typeof worker
