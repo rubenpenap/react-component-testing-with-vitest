@@ -1,3 +1,13 @@
+> ## 🚨 Important Notice
+>
+> This repository is a clone of the
+> [React Component Testing with Vitest](https://www.epicweb.dev/workshops/react-component-testing-with-vitest)
+> by Epic Web. It has been published solely to document my GitHub activity and
+> for personal educational purposes.
+>
+> **Note:** This is not an official fork or a maintained derivative of the
+> original project.
+
 <div align="center">
   <h1><a href="https://www.epicweb.dev/workshops">React Component Testing with Vitest</a></h1>
   <strong>
