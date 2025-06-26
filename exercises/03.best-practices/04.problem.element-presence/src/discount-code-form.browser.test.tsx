@@ -84,20 +84,21 @@ test('displays an error when fetching the discount fails', async ({
 test('removes the applied discount code', async () => {
 	render(<DiscountCodeForm />)
 
-	// 🐨 Locate the `discountInput` element by its text "Discount code".
-	// Then, fill in any discount code (e.g. 'EPIC2025').
-	//
-	// 🐨 Locate the `applyDiscountButton` element by its role and name.
-	// Click on it to apply the discount code.
-	//
-	// 🐨 Next, find the `discountText element for the applied discount
-	// and make sure that it is visible on the page.
-	//
-	// 🐨 Now, create a new variable called `removeDiscountButton` and
-	// assign it the result of locating a button with the accessible name
-	// "Remove discount". Click on it to remove the applied code.
-	//
-	// 🐨 Finally, write an assertion that the `discountText` element
-	// is no longer present in the document.
-	// 💰 await expect.element(locator).not.toBeInTheDocument()
+	const discountInput = page.getByLabelText('Discount code')
+	await discountInput.fill('EPIC2025')
+
+	const applyDiscountButton = page.getByRole('button', {
+		name: 'Apply discount',
+	})
+	await applyDiscountButton.click()
+
+	const discountText = page.getByText('Discount: EPIC2025 (-20%)')
+	await expect.element(discountText).toBeVisible()
+
+	const removeDiscountButton = page.getByRole('button', {
+		name: 'Remove discount',
+	})
+	await removeDiscountButton.click()
+
+	await expect.element(discountText).not.toBeInTheDocument()
 })
