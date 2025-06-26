@@ -1,13 +1,10 @@
 import { page } from '@vitest/browser/context'
 import { render } from 'vitest-browser-react'
 import { http, HttpResponse } from 'msw'
-// 🐨 Import the `test` function from `test-extend`.
-// This custom `test` function exposes the `worker` object
-// you will use to access and use MSW in tests.
-// 💰 import { test } from '../test-extend'
+import { test } from '../test-extend'
 import { DiscountCodeForm } from './discount-code-form'
 
-test('applies a discount code', async () => {
+test.only('applies a discount code', async () => {
 	render(<DiscountCodeForm />)
 
 	const discountInput = page.getByLabelText('Discount code')
