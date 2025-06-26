@@ -4,7 +4,7 @@ import { http, HttpResponse } from 'msw'
 import { test } from '../test-extend'
 import { DiscountCodeForm } from './discount-code-form'
 
-test.only('applies a discount code', async () => {
+test('applies a discount code', async () => {
 	render(<DiscountCodeForm />)
 
 	const discountInput = page.getByLabelText('Discount code')
@@ -20,21 +20,13 @@ test.only('applies a discount code', async () => {
 		.toBeVisible()
 })
 
-test('displays a warning for legacy discount codes', async ({
-	// 🐨 Access the custom `worker` fixture you've prepared earlier.
-}) => {
-	// 🐨 Call `worker.use()` and provide it a new request handler
-	// for the same POST https://api.example.com/discount/code request.
-	// In this handler, respond with a different mocked response that
-	// returns `isLegacy: true` in its JSON payload.
-	//
-	// Use the existing happy-path request handler from `src/mocks/handlers.ts`
-	// as a reference!
-	//
-	// 💰 worker.use()
-	// 💰 http.post(predicate, resolver)
-	// 💰 HttpResponse.json({ code, amount, isLegacy })
-
+test('displays a warning for legacy discount codes', async ({ worker }) => {
+	worker.use(
+		http.post('https://api.example.com/discount/code', async ({ request }) => {
+			const code = await request.text()
+			return HttpResponse.json({ code, amount: 10, isLegacy: true })
+		}),
+	)
 	render(<DiscountCodeForm />)
 
 	const discountInput = page.getByLabelText('Discount code')
@@ -45,27 +37,23 @@ test('displays a warning for legacy discount codes', async ({
 	})
 	await applyDiscountButton.click()
 
-	// 🐨 Write an assertion that expects the text element
-	// with the applied discount code to be visible on the page.
-	// 💰 "Discount: LEGA2000 (-10%)"
-	// 💰 await expect.element(locator).toBeVisible()
-	//
-	// 🐨 Write another assertion that expected the warning
-	// to appear, notifying the user about the legacy discount code.
-	// 💰 await expect.element(locator).toHaveTextContent(content)
-	// 💰 page.getByRole('alert')
-	// 💰 '"LEGA2000" is a legacy code. Discount amount halved.'
+	await expect
+		.element(page.getByText('Discount: LEGA2000 (-10%)'))
+		.toBeVisible()
+
+	await expect
+		.element(page.getByRole('alert'))
+		.toHaveTextContent('"LEGA2000" is a legacy code. Discount amount halved.')
 })
 
 test('displays an error when fetching the discount fails', async ({
-	// 🐨 Access the `worker` fixture here.
+	worker,
 }) => {
-	// 🐨 Call `worker.use()` and describe another request handler.
-	// This time, respond with a mocked 500 response to simulate
-	// server error.
-	// 💰 worker.use(handler)
-	// 💰 http.post(predicate, resolver)
-	// 💰 new HttpResponse(null, { status: 500 })
+	worker.use(
+		http.post('https://api.example.com/discount/code', () => {
+			return new HttpResponse(null, { status: 500 })
+		}),
+	)
 
 	render(<DiscountCodeForm />)
 
@@ -77,9 +65,7 @@ test('displays an error when fetching the discount fails', async ({
 	})
 	await applyDiscountButton.click()
 
-	// 🐨 Write an assertion that a notification is displayed,
-	// saying that applying the discount code has failed.
-	// 💰 await expect.element(locator).toHaveTextContent(content)
-	// 💰 page.getByRole('alert')
-	// 💰 'Failed to apply the discount code'
+	await expect
+		.element(page.getByRole('alert'))
+		.toHaveTextContent('Failed to apply the discount code')
 })
