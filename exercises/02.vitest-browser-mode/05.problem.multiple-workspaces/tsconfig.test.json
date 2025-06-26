@@ -1,8 +1,0 @@
-{
-	"extends": "./tsconfig.app.json",
-	"include": ["vitest.browser.setup.ts", "src/**/*", "src/**/*.test.ts*"],
-	"exclude": [],
-	"compilerOptions": {
-		"types": ["vitest/globals", "@vitest/browser/providers/playwright"]
-	}
-}
