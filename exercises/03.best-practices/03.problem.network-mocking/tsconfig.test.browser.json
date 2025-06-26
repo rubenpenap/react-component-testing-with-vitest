@@ -2,6 +2,7 @@
 	"extends": "./tsconfig.app.json",
 	"include": [
 		"vitest.browser.setup.ts",
+		"test-extend.ts",
 		"src/**/*",
 		"src/**/*.browser.test.ts*"
 	],
