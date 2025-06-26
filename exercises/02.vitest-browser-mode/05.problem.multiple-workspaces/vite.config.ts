@@ -1,7 +1,6 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
-// 🐨 Import `configDefaults` from `vitest/config`
-// 💰 import { foo } from 'bar'
+import { configDefaults } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -10,18 +9,40 @@ export default defineConfig({
 	server: {
 		port: process.env.PORT ? Number(process.env.PORT) : undefined,
 	},
-	// 🐨 Add a new property called `workspace`.
-	// As the value, provide an array with two entries.
-	// 💰 test: { workspace: [{}, {}] }
-	//
-	// 🐨 In the first entry of the `workspace` array,
-	// define a `test` property and give it a `test.name` equal to "unit".
-	// 💰 { test: { name: 'unit' } }
-	//
-	// 🐨 In the unit test workspace, set `globals` to true
-	// and `environment` to "node".
-	// 💰 globals: true
-	// 💰 environment: 'node'
+	test: {
+		workspace: [
+			{
+				test: {
+					name: 'unit',
+					globals: true,
+					environment: 'node',
+					include: ['.src/**/*.test.ts'],
+					exclude: [
+						...configDefaults.exclude,
+						'./src/**/*.browser.test.ts(x)?',
+					],
+				},
+			},
+			{
+				extends: true,
+				test: {
+					name: 'browser',
+					globals: true,
+					include: ['./src/**/*.browser.test.ts(x)?'],
+					browser: {
+						enabled: true,
+						provider: 'playwright',
+						instances: [
+							{
+								browser: 'chromium',
+								setupFiles: ['./vitest.browser.setup.ts'],
+							},
+						],
+					},
+				},
+			},
+		],
+	},
 	//
 	// 🐨 Add the `include` property and set it to an array
 	// with the only entry "**/*.test.ts".
@@ -51,17 +72,17 @@ export default defineConfig({
 	// 💰 { test: { name: 'browser', browser: {...} }}
 	//
 	// 💣 Delete this root-level `test` property altogether.
-	test: {
-		globals: true,
-		browser: {
-			enabled: true,
-			provider: 'playwright',
-			instances: [
-				{
-					browser: 'chromium',
-					setupFiles: ['./vitest.browser.setup.ts'],
-				},
-			],
-		},
-	},
+	// test: {
+	// 	globals: true,
+	// 	browser: {
+	// 		enabled: true,
+	// 		provider: 'playwright',
+	// 		instances: [
+	// 			{
+	// 				browser: 'chromium',
+	// 				setupFiles: ['./vitest.browser.setup.ts'],
+	// 			},
+	// 		],
+	// 	},
+	// },
 })
