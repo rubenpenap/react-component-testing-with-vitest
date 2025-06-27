@@ -39,24 +39,11 @@ function MenuItemsList({ items }: { items: Array<MenuItem> }) {
 					<li key={item.url}>
 						<NavLink
 							to={item.url}
+							end={true}
 							className={({ isActive }) =>
 								[
 									'px-2 py-1 hover:text-blue-600 hover:underline',
-
-									// You will be adding a Conditional breakpoint on this line.
-									// But before you do, there's a slight problem. Conditions can only access
-									// variable from the current scope (the `className` function), and our `item`
-									// lives in the parent scope.
-									//
-									// 🐨 Reference the `item` here to be used in the condition for the breakpoint.
-									// 💰 item && isActive
-									//
-									// 🐨 Next, right-click on the gutter to the left of this line and choose
-									// the "Add Conditional Breakpoint..." option. Enter `item.title === 'Dashboard'`
-									// as the condition for the breakpoint.
-									//
-									// 🐨 Finally, run the main menu test suite in the debug mode to see what's wrong.
-									isActive ? 'font-bold text-black' : 'text-gray-600',
+									item && isActive ? 'font-bold text-black' : 'text-gray-600',
 								].join(' ')
 							}
 						>
